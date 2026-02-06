@@ -6,23 +6,27 @@ function Navbar() {
 
   return (
     <nav className="bg-white fixed w-full top-0 z-50 shadow-sm">
-      <div className="max-w-7xl mx-auto px-4 md:px-8">
-        <div className="flex justify-between items-center h-16">
+      <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-10">
+        <div className="flex justify-between items-center h-16 lg:h-20">
 
           {/* Logo */}
           <div className="flex items-center gap-3">
             <img
               src={logo}
               alt="Sports Academy Logo"
-              className="h-16 w-16 object-contain"
+              className="
+                h-12 w-12
+                lg:h-14 lg:w-14
+                object-contain
+              "
             />
-            <span className="font-semibold text-lg text-black">
+            <span className="font-semibold text-lg lg:text-xl text-black whitespace-nowrap">
               Sports Academy
             </span>
           </div>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             <a className="text-black hover:text-cyan-600 transition" href="/">
               Home
             </a>
@@ -40,7 +44,7 @@ function Navbar() {
             <a
               href="#login"
               className="
-                px-4 py-2
+                px-5 py-2.5
                 rounded-full
                 font-medium
                 text-white
@@ -71,12 +75,11 @@ function Navbar() {
             <a className="block text-black" href="#about">About</a>
             <a className="block text-black" href="#contact">Contact</a>
 
-            {/* Mobile Login Button */}
             <a
               href="#login"
               className="
                 block text-center
-                py-2
+                py-2.5
                 rounded-full
                 font-medium
                 text-white

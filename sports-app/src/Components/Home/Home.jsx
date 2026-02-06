@@ -1,6 +1,7 @@
 import Navbar from '../Navbar/Navbar';
 import Herosection from '../Herosection/Herosection';
 import Game from '../Game/Game';
+import Feature from '../Feature/Feature';
 
 function Home(){
   return(
@@ -8,6 +9,7 @@ function Home(){
       <Navbar/>
       <Herosection/>
       <Game/>
+      <Feature/>
     </div>
   )
 }
