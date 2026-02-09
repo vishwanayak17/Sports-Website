@@ -2,7 +2,6 @@ import React from "react";
 import {
   FaFacebookF,
   FaInstagram,
-  FaTwitter,
   FaYoutube,
   FaMapMarkerAlt,
   FaPhoneAlt,
@@ -93,7 +92,7 @@ const Footer = () => {
           </p>
 
           <div className="flex gap-4 mt-6">
-            {[FaFacebookF, FaInstagram, FaTwitter, FaYoutube].map(
+            {[FaFacebookF, FaInstagram, FaYoutube].map(
               (Icon, index) => (
                 <span
                   key={index}
