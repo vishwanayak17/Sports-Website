@@ -56,6 +56,17 @@ const games = [
     icon: "🥋",
     color: "from-gray-700 to-gray-900",
   },
+  { name: "Cricket", icon: "🏏", color: "from-green-400 to-emerald-600" },
+  { name: "Football", icon: "⚽", color: "from-yellow-400 to-orange-500" },
+  { name: "Badminton", icon: "🏸", color: "from-purple-400 to-pink-500" },
+  { name: "Tennis", icon: "🎾", color: "from-lime-400 to-green-500" },
+  { name: "Basketball", icon: "🏀", color: "from-orange-400 to-red-500" },
+  { name: "Swimming", icon: "🏊‍♂️", color: "from-cyan-400 to-blue-500" },
+  { name: "Hockey", icon: "🏑", color: "from-indigo-400 to-blue-600" },
+  { name: "Volleyball", icon: "🏐", color: "from-rose-400 to-pink-600" },
+  { name: "Table Tennis", icon: "🏓", color: "from-teal-400 to-cyan-600" },
+  { name: "Skating", icon: "⛸️", color: "from-sky-400 to-indigo-500" },
+  { name: "Martial Arts", icon: "🥋", color: "from-gray-700 to-gray-900" },
 ];
 
 function Game() {
@@ -93,11 +104,17 @@ function Game() {
           {games.map((game, i) => (
             <div
               key={i}
-              className="min-w-[260px] md:min-w-[300px] mx-3"
+              className="
+                w-full
+                sm:w-1/2
+                lg:w-1/3
+                px-4
+                flex-shrink-0
+              "
             >
               <div
                 className={`
-                  h-[200px]
+                  h-[240px]
                   rounded-3xl
                   bg-gradient-to-br ${game.color}
                   flex flex-col items-center justify-center
