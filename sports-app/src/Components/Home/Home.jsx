@@ -4,6 +4,7 @@ import Game from '../Game/Game';
 import WhyChooseUs from '../howitworks/howitworks';
 import Register from '../register/register';
 import Footer from '../footer/footer';
+import Features from "../Feature/Feature"
 
 
 
@@ -13,6 +14,7 @@ function Home(){
       <Navbar/>
       <Herosection/>
       <Game/>
+      <Features/>
       <WhyChooseUs/>
       <Register/>
       <Footer/>
