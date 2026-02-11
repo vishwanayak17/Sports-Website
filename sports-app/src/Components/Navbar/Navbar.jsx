@@ -74,7 +74,7 @@ function Navbar() {
             {/* Mobile Login Button */}
             <a
               href="#login"
-              className="
+              className="69
                 block text-center
                 py-2
                 rounded-full

@@ -7,9 +7,12 @@ import Footer from '../footer/footer';
 
 
 
+
 function Home(){
   return(
-    <div className="App">
+
+<>
+
       <Navbar/>
       <Herosection/>
       <Game/>
@@ -17,9 +20,9 @@ function Home(){
       <Register/>
       <Footer/>
      
+     
       
-
-    </div>
+</>
   )
 }
 
