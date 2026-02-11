@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom"; // React Router
 import logo from "../../assets/sportimg.png";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate(); // Navigate hook
 
   return (
     <nav className="bg-white fixed w-full top-0 z-50 shadow-sm">
@@ -16,7 +18,7 @@ function Navbar() {
               alt="Sports Academy Logo"
               className="
                 h-12 w-12
-                lg:h-14 lg:w-14
+                lg:h-16 lg:w-16
                 object-contain
               "
             />
@@ -27,12 +29,15 @@ function Navbar() {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            <a className="text-black hover:text-cyan-600 transition" href="/">
+            <Link className="text-black hover:text-cyan-600 transition" to="/">
               Home
-            </a>
-            <a className="text-black hover:text-cyan-600 transition" href="#academies">
+            </Link>
+
+            {/* Academies navigates to /academies */}
+            <Link className="text-black hover:text-cyan-600 transition" to="/academies">
               Academies
-            </a>
+            </Link>
+
             <a className="text-black hover:text-cyan-600 transition" href="#about">
               About
             </a>
@@ -70,10 +75,18 @@ function Navbar() {
         {/* Mobile Menu */}
         {open && (
           <div className="md:hidden bg-white shadow-lg rounded-xl mt-2 p-4 space-y-3">
-            <a className="block text-black" href="/">Home</a>
-            <a className="block text-black" href="#academies">Academies</a>
-            <a className="block text-black" href="#about">About</a>
-            <a className="block text-black" href="#contact">Contact</a>
+            <Link className="block text-black" to="/">
+              Home
+            </Link>
+            <Link className="block text-black" to="/academies">
+              Academies
+            </Link>
+            <a className="block text-black" href="#about">
+              About
+            </a>
+            <a className="block text-black" href="#contact">
+              Contact
+            </a>
 
             <a
               href="#login"
