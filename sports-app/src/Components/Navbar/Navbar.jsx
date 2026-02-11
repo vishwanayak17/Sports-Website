@@ -39,7 +39,7 @@ function Navbar() {
             </Link>
 
             <a className="text-black hover:text-cyan-600 transition" href="#about">
-              About
+              About Us
             </a>
             <a className="text-black hover:text-cyan-600 transition" href="#contact">
               Contact
