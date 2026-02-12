@@ -16,7 +16,10 @@
     "@tailwindcss/vite": "^4.1.18",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+<<<<<<< HEAD
     "react-google-recaptcha": "^3.1.0",
+=======
+>>>>>>> 7d4b1a3265468d6282d9369f3f8cbe66567a2a52
     "react-icons": "^5.5.0",
     "react-router-dom": "^7.13.0"
   },

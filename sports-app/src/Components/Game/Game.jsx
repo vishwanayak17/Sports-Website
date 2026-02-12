@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 const games = [
+<<<<<<< HEAD
   {
     name: "Cricket",
     icon: "🏏",
@@ -56,6 +57,8 @@ const games = [
     icon: "🥋",
     color: "from-gray-700 to-gray-900",
   },
+=======
+>>>>>>> 7d4b1a3265468d6282d9369f3f8cbe66567a2a52
   { name: "Cricket", icon: "🏏", color: "from-green-400 to-emerald-600" },
   { name: "Football", icon: "⚽", color: "from-yellow-400 to-orange-500" },
   { name: "Badminton", icon: "🏸", color: "from-purple-400 to-pink-500" },
@@ -77,14 +80,21 @@ function Game() {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % games.length);
     }, 3000);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7d4b1a3265468d6282d9369f3f8cbe66567a2a52
     return () => clearInterval(interval);
   }, []);
 
   return (
     <section className="py-20 bg-slate-50 overflow-hidden">
       {/* Heading */}
+<<<<<<< HEAD
       <div className="text-center mb-12 px-4">
+=======
+      <div className="text-center mb-14 px-4">
+>>>>>>> 7d4b1a3265468d6282d9369f3f8cbe66567a2a52
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
           Explore Sports Categories
         </h2>
@@ -94,11 +104,19 @@ function Game() {
       </div>
 
       {/* Slider */}
+<<<<<<< HEAD
       <div className="max-w-6xl mx-auto overflow-hidden">
         <div
           className="flex transition-transform duration-700 ease-in-out"
           style={{
             transform: `translateX(-${index * 300}px)`,
+=======
+      <div className="max-w-7xl mx-auto overflow-hidden px-6">
+        <div
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{
+            transform: `translateX(-${index * (100 / 3)}%)`,
+>>>>>>> 7d4b1a3265468d6282d9369f3f8cbe66567a2a52
           }}
         >
           {games.map((game, i) => (
@@ -125,8 +143,13 @@ function Game() {
                   cursor-pointer
                 `}
               >
+<<<<<<< HEAD
                 <span className="text-6xl mb-4">{game.icon}</span>
                 <h3 className="text-xl font-semibold tracking-wide">
+=======
+                <span className="text-6xl mb-5">{game.icon}</span>
+                <h3 className="text-2xl font-semibold tracking-wide">
+>>>>>>> 7d4b1a3265468d6282d9369f3f8cbe66567a2a52
                   {game.name}
                 </h3>
               </div>
