@@ -84,10 +84,10 @@ function Herosection() {
                 <option value="Badminton">Badminton</option>
                 <option value="Swimming">Swimming</option>
                 <option value="Hockey">Hockey</option>
-                <option value="Hockey">Table Tennis</option>
-                <option value="Hockey">Skating</option>
-                <option value="Hockey">Basket Ball</option>
-                <option value="Hockey">Volley Ball</option>
+                <option value="Tennis"> Tennis</option>
+                <option value="Skating">Skating</option>
+                <option value="Basketball">Basket Ball</option>
+                <option value="Volleyball">Volley Ball</option>
                 <option value="Martial Arts">Martial Arts</option>
               </select>
             </div>
