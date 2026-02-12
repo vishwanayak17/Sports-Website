@@ -19,7 +19,7 @@ function Feature() {
           </p>
         </div>
         <Link
-          to="/academies"
+          to="/academis"
           className="text-cyan-600 font-medium hover:underline"
         >
           View All
