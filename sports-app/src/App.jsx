@@ -8,6 +8,7 @@ import About from "./Components/Aboutus/Aboutus";
 import Owner from "./Components/Dashboard/OwnerDashboard";
 import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/footer/footer";
+import Contact from "./Components/contact/contact"
 
 
 function App() {
@@ -23,6 +24,8 @@ function App() {
           <Route path="/about" element={<About/>} />
           <Route path="/Owner" element= {<Owner/>} />
           <Route path="/AdminDashboard" element={<AdminDashboard/>} />
+          <Route path="/Contactus" element={<Contact/>} />
+
         </Routes>
 
     <Footer/>

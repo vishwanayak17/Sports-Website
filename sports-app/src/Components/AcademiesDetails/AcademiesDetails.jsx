@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -18,7 +19,11 @@ function AcademiesDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const academy = academiesFullData.find((item) => item.id === id);
+ const academy = academiesFullData.find(
+  (item) => item.id === Number(id)
+);
+
+
 
   if (!academy)
     return (

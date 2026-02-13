@@ -38,7 +38,7 @@ function Navbar() {
               <a className="text-black hover:text-cyan-600 transition" href="/about">
                 About Us
               </a>
-              <a className="text-black hover:text-cyan-600 transition" href="#contact">
+              <a className="text-black hover:text-cyan-600 transition" href="/Contactus">
                 Contact
               </a>
 

@@ -29,7 +29,7 @@ const Contact = () => {
               <FaPhoneAlt className="text-green-500 text-xl" />
             </div>
             <h3>Call Us</h3>
-            <p>+91 98765 43210</p>
+            <p>+91 8320251290, +7698684784</p>
           </a>
 
           {/* EMAIL */}
@@ -38,7 +38,7 @@ const Contact = () => {
               <FaEnvelope className="text-yellow-500 text-xl" />
             </div>
             <h3>Email</h3>
-            <p>info@gujaratsportsacademy.com</p>
+            <p>abc01@gmail.com</p>
           </a>
 
           {/* LOCATION */}
@@ -52,7 +52,7 @@ const Contact = () => {
               <FaMapMarkerAlt className="text-blue-500 text-xl" />
             </div>
             <h3>Visit Us</h3>
-            <p>Navrangpura, Ahmedabad</p>
+            <p>Ahmedabad.Gandhinagar</p>
           </a>
 
         </section>

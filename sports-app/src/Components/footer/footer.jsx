@@ -1,8 +1,10 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+
 import {
   FaFacebookF,
   FaInstagram,
-  FaTwitter,
   FaYoutube,
   FaMapMarkerAlt,
   FaPhoneAlt,
@@ -11,7 +13,9 @@ import {
 
 import logo from "../../assets/sportimg.png"; // your logo path
 
+
 const Footer = () => {
+
   return (
     <footer className="mt-24 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 text-blue-100">
       
@@ -64,29 +68,32 @@ const Footer = () => {
             </li>
           </ul>
         </div>
+{/* Sports Programs */}
+<div className="transition hover:-translate-y-1">
+  <h3 className="text-lg font-semibold text-white mb-4">
+    Training Programs
+  </h3>
 
-        {/* Sports Programs */}
-        <div className="transition hover:-translate-y-1">
-          <h3 className="text-lg font-semibold text-white mb-4">
-            Training Programs
-          </h3>
-          <ul className="space-y-2 text-sm">
-            {[
-              "🏏 Cricket Academy",
-              "⚽ Football Academy",
-              "🏀 Basketball Training",
-              "🏸 Badminton Coaching",
-              "🏊 Swimming Classes",
-            ].map((sport, index) => (
-              <li
-                key={index}
-                className="hover:text-white hover:translate-x-1 transition cursor-pointer"
-              >
-                {sport}
-              </li>
-            ))}
-          </ul>
-        </div>
+  <ul className="space-y-2 text-sm">
+    {[
+      { id: 1, name: "🏏 Cricket Academy" },
+      { id: 2, name: "⚽ Football Academy" },
+      { id: 3, name: "🏀 Basketball Training" },
+      { id: 4, name: "🏸 Badminton Coaching" },
+      { id: 5, name: "🏊 Swimming Classes" },
+    ].map((sport) => (
+      <li key={sport.id}>
+        <Link
+          to={`/academy/${sport.id}`}
+          className="hover:text-white hover:translate-x-1 transition cursor-pointer block"
+        >
+          {sport.name}
+        </Link>
+      </li>
+    ))}
+  </ul>
+</div>
+
 
         {/* Contact & Social */}
         <div className="transition hover:-translate-y-1">
@@ -96,16 +103,16 @@ const Footer = () => {
 
           <p className="flex items-center gap-3 text-sm hover:text-white transition cursor-pointer">
             <FaPhoneAlt className="text-green-400" />
-            +91 98765 43210
+            +91 8320251290,7698684784
           </p>
 
           <p className="flex items-center gap-3 text-sm mt-3 hover:text-white transition cursor-pointer">
             <FaEnvelope className="text-yellow-300" />
-            info@gujaratsportsacademy.com
+            abc01@gmail.com
           </p>
 
           <div className="flex gap-4 mt-6">
-            {[FaFacebookF, FaInstagram, FaTwitter, FaYoutube].map(
+            {[FaFacebookF, FaInstagram, FaYoutube].map(
               (Icon, index) => (
                 <span
                   key={index}
@@ -127,7 +134,7 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-blue-700/50 py-4 text-center text-xs text-blue-200">
         Serving Ahmedabad & Gandhinagar · ©{" "}
-        {new Date().getFullYear()} Gujarat Sports Academy
+        {new Date().getFullYear()} Sports Academy
       </div>
     </footer>
   );
