@@ -1,128 +1,148 @@
 import React from "react";
-import nk from "../../assets/nk.png";
 
-
-const About = () => {
+const AboutSportsAcademy = () => {
   return (
-    <div className="min-h-screen text-white relative">
+    <div className="bg-gray-100 min-h-screen py-16 px-4">
 
-      {/* HERO SECTION WITH IMAGE */}
-      <section
-        className="relative text-center py-20 px-6 bg-cover bg-center"
-        style={{
-          backgroundImage: `url(${nk})`,
-        }}
-      >
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/80 via-purple-900/70 to-orange-600/70"></div>
+      {/* PAGE TITLE */}
+      <div className="text-center mb-12">
+        <h1 className="text-5xl font-bold text-gray-800 mb-3">
+          About Our Sports Academy
+        </h1>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          We train athletes with passion, discipline, and professional guidance
+          to achieve excellence in sports and life.
+        </p>
+      </div>
 
-        {/* Content */}
-        <div className="relative z-10">
-          <h1 className="text-5xl font-bold mb-4">
-            About <span className="text-cyan-300">Us</span>
-          </h1>
+      {/* HERO SECTION */}
+      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12 mb-16">
+        <div className="grid md:grid-cols-2 gap-10 items-center">
 
-          <p className="text-lg opacity-90 mb-10">
-            Empowering Sports Academies Across Gujarat
-          </p>
+          <img
+            src="https://images.unsplash.com/photo-1517649763962-0c623066013b"
+            alt="sports"
+            className="rounded-2xl shadow-lg w-full h-[350px] object-cover"
+          />
 
-          {/* Why Choose Card */}
-          <div className="max-w-md mx-auto bg-white/10 backdrop-blur-lg p-6 rounded-2xl shadow-2xl text-left">
-            <h2 className="text-xl font-semibold mb-4 text-cyan-200">
-              Why Choose Us?
+          <div>
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">
+              Who We Are
             </h2>
 
-            <ul className="space-y-3">
-              <li>✔ Verified Academies</li>
-              <li>✔ Easy Registration</li>
-              <li>✔ City Based Search</li>
-              <li>✔ Fast Approvals</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* REST SECTION */}
-      <div className="bg-gradient-to-br from-indigo-900 via-purple-800 to-orange-500">
-
-        {/* MISSION + FEATURES */}
-        <section className="px-6 py-16 grid md:grid-cols-2 gap-10 max-w-6xl mx-auto">
-
-          <div className="bg-white/10 backdrop-blur-md p-8 rounded-2xl shadow-xl">
-            <h2 className="text-2xl font-bold mb-4 text-cyan-300">
-              Our Mission
-            </h2>
-            <p className="mb-6">
-              Helping players connect with the best sports academies in Gujarat.
+            <p className="text-gray-600 mb-4">
+              Our Sports Academy is dedicated to developing athletes of all ages.
+              We provide structured training programs, expert guidance, and
+              world-class facilities to help players reach their full potential.
             </p>
 
-            <button className="bg-indigo-600 hover:bg-indigo-700 px-6 py-2 rounded-full transition">
-              Learn More
+            <p className="text-gray-600 mb-6">
+              From beginners to professionals, we focus on skill development,
+              fitness, teamwork, and sportsmanship.
+            </p>
+
+            <button className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition">
+              Join Our Academy
             </button>
           </div>
 
-          <div className="grid grid-cols-1 gap-6">
-            <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 rounded-2xl shadow-xl cursor-pointer hover:scale-105 transition">
-              <h3 className="text-xl font-semibold">Trusted Platform</h3>
-            </div>
+        </div>
+      </div>
 
-            <div className="bg-gradient-to-r from-orange-500 to-red-500 p-6 rounded-2xl shadow-xl cursor-pointer hover:scale-105 transition">
-              <h3 className="text-xl font-semibold">Rapid Growth</h3>
-            </div>
-
-            <div className="bg-gradient-to-r from-yellow-400 to-orange-500 p-6 rounded-2xl shadow-xl cursor-pointer hover:scale-105 transition">
-              <h3 className="text-xl font-semibold">Community Support</h3>
-            </div>
-          </div>
-        </section>
-
-        {/* ACHIEVEMENTS */}
-        <section className="text-center py-16 px-6">
-          <h2 className="text-3xl font-bold mb-10">
-            Our Achievements
-          </h2>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
-            <div className="bg-white/10 p-6 rounded-xl shadow-lg hover:scale-105 transition cursor-pointer">
-              <h3 className="text-3xl font-bold">100+</h3>
-              <p>Academies</p>
-            </div>
-
-            <div className="bg-white/10 p-6 rounded-xl shadow-lg hover:scale-105 transition cursor-pointer">
-              <h3 className="text-3xl font-bold">500+</h3>
-              <p>Players</p>
-            </div>
-
-            <div className="bg-white/10 p-6 rounded-xl shadow-lg hover:scale-105 transition cursor-pointer">
-              <h3 className="text-3xl font-bold">2</h3>
-              <p>Cities</p>
-            </div>
-
-            <div className="bg-white/10 p-6 rounded-xl shadow-lg hover:scale-105 transition cursor-pointer">
-              <h3 className="text-3xl font-bold">10+</h3>
-              <p>Sports</p>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA */}
-        <section className="text-center py-20">
-          <h2 className="text-3xl font-bold mb-4">
-            Ready to Join Us?
-          </h2>
-
-          <p className="mb-8 opacity-90">
-            Grow your academy with us today!
+      {/* MISSION VISION */}
+      <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 mb-16">
+        
+        <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition">
+          <h2 className="text-2xl font-bold mb-3 text-blue-600">Our Mission</h2>
+          <p className="text-gray-600">
+            To build strong, skilled, and confident athletes through
+            professional coaching, discipline, and modern training techniques.
           </p>
+        </div>
 
-          <button className="bg-green-500 hover:bg-green-600 px-10 py-3 rounded-full text-lg font-semibold shadow-lg hover:scale-105 transition">
-            Get Started
-          </button>
-        </section>
+        <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition">
+          <h2 className="text-2xl font-bold mb-3 text-blue-600">Our Vision</h2>
+          <p className="text-gray-600">
+            To become the most trusted sports training academy that inspires
+            excellence, leadership, and success.
+          </p>
+        </div>
 
       </div>
+
+      {/* FACILITIES */}
+      <div className="max-w-6xl mx-auto text-center mb-16">
+        <h2 className="text-3xl font-bold mb-10 text-gray-800">
+          Our Facilities
+        </h2>
+
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-8">
+          <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+            <h3 className="text-xl font-semibold mb-2">Modern Playground</h3>
+            <p className="text-gray-600">International standard sports ground.</p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+            <h3 className="text-xl font-semibold mb-2">Fitness Training</h3>
+            <p className="text-gray-600">Professional gym and fitness programs.</p>
+          </div>
+
+          <div className="bg-white rounded-2xl shadow-xl p-6 hover:shadow-2xl transition">
+            <h3 className="text-xl font-semibold mb-2">Expert Coaching</h3>
+            <p className="text-gray-600">Certified and experienced trainers.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* WHY CHOOSE US */}
+      <div className="max-w-6xl mx-auto bg-white rounded-3xl shadow-2xl p-10">
+        <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
+          Why Choose Our Academy?
+        </h2>
+
+        <div className="grid md:grid-cols-3 gap-8 text-center">
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Professional Training</h3>
+            <p className="text-gray-600">Structured programs for skill development.</p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Safe Environment</h3>
+            <p className="text-gray-600">Supportive and disciplined atmosphere.</p>
+          </div>
+
+          <div>
+            <h3 className="text-xl font-semibold mb-2">Career Growth</h3>
+            <p className="text-gray-600">Opportunities in competitions & tournaments.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* STATS */}
+      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+        <div className="bg-white rounded-xl shadow-xl p-6 text-center">
+          <h3 className="text-3xl font-bold text-blue-600">500+</h3>
+          <p className="text-gray-600">Students</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-xl p-6 text-center">
+          <h3 className="text-3xl font-bold text-blue-600">20+</h3>
+          <p className="text-gray-600">Coaches</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-xl p-6 text-center">
+          <h3 className="text-3xl font-bold text-blue-600">10+</h3>
+          <p className="text-gray-600">Sports</p>
+        </div>
+
+        <div className="bg-white rounded-xl shadow-xl p-6 text-center">
+          <h3 className="text-3xl font-bold text-blue-600">15+</h3>
+          <p className="text-gray-600">Years Experience</p>
+        </div>
+      </div>
+
     </div>
   );
 };
 
-export default About;
+export default AboutSportsAcademy;
