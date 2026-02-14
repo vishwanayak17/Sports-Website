@@ -1,4 +1,5 @@
 import React from "react";
+
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -18,7 +19,11 @@ function AcademiesDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const academy = academiesFullData.find((item) => item.id === id);
+const academy = academiesFullData.find(
+  (item) => item.id === id
+);
+
+
 
   if (!academy)
     return (
@@ -36,8 +41,8 @@ function AcademiesDetails() {
 
           {/* BACK BUTTON */}
           <button
-            onClick={() => navigate("/academies")}
-            className=" mt-12 flex items-center gap-2 text-gray-700 font-medium mb-4 hover:text-blue-600"
+            onClick={() => navigate("/academis")}
+            className="flex items-center gap-2 text-gray-700 font-medium mb-4 hover:text-blue-600"
           >
             <FaArrowLeft /> Back to Academies
           </button>

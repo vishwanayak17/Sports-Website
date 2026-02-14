@@ -1,30 +1,35 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Academies from "./Components/Academies/Academies";
- import AcademiesDetails from "./Components/AcademiesDetails/AcademiesDetails";
- import Home from "./Components/Home/Home";
-//import OwnerDashboard from "./Components/Dashboard/OwnerDashboard"; // Owner dashboard design
-//import AdminDashboard from "./Components/Dashboard/AdminDashboard";
+import AdminDashboard from "./Components/Dashboard/AdminDashboard";
+import { Router, Routes ,Route, BrowserRouter } from "react-router-dom";
+import Home from "./Components/Home/Home";
+import Academis from "./Components/Academies/Academies";
+import AcademiesDetails from "./Components/AcademiesDetails/AcademiesDetails";
+import About from "./Components/Aboutus/Aboutus";
+import Owner from "./Components/Dashboard/OwnerDashboard";
 import Navbar from "./Components/Navbar/Navbar";
+import Footer from "./Components/footer/footer";
+import Contact from "./Components/contact/contact"
+
 
 function App() {
   return (
     <div>
-   
-      {
-      <Router>
-        <Navbar/>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/academies" element={<Academies />} />
-          <Route path="/academy/:id" element={<AcademiesDetails />} />
-        </Routes>
-      </Router>
-      }
+      <BrowserRouter>
+      <Navbar/>
 
-      {/* Directly show Owner Dashboard for design preview */}
-      {/* { <OwnerDashboard /> } */}
-      {/* <AdminDashboard/> */}
+        <Routes>    
+          <Route path="/" element= {<Home/>} />
+          <Route path="/academis" element= {<Academis/>} />
+          <Route path="/academy/:id" element= {<AcademiesDetails/>} />
+          <Route path="/about" element={<About/>} />
+          <Route path="/Owner" element= {<Owner/>} />
+          <Route path="/AdminDashboard" element={<AdminDashboard/>} />
+          <Route path="/Contactus" element={<Contact/>} />
+
+        </Routes>
+
+    <Footer/>
+      </BrowserRouter>
     </div>
   );
 }

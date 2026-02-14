@@ -1,16 +1,30 @@
-import Navbar from '../Navbar/Navbar';
+// import Navbar from '../Navbar/Navbar';
 import Herosection from '../Herosection/Herosection';
 import Game from '../Game/Game';
-import Feature from '../Feature/Feature';
+import WhyChooseUs from '../howitworks/howitworks';
+import Feature from "../Feature/Feature"
+import Register from '../register/register';
+// import Footer from '../footer/footer';
+
+
+
 
 function Home(){
   return(
-    <div className="App">
-      <Navbar/>
+
+<>
+
+      {/* <Navbar/> */}
       <Herosection/>
       <Game/>
       <Feature/>
-    </div>
+      <WhyChooseUs/>
+      <Register/>
+      {/* <Footer/> */}
+     
+     
+      
+</>
   )
 }
 

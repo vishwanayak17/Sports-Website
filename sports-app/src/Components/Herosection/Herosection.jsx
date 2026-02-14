@@ -14,7 +14,7 @@ function Herosection() {
       return;
     }
 
-    navigate(`/academies?sport=${sport}&city=${location}`);
+    navigate(`/academis?sport=${sport}&city=${location}`);
   };
 
   return (

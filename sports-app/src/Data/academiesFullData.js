@@ -257,4 +257,5 @@ const academiesFullData = [
   },
 ];
 
+
 export default academiesFullData;

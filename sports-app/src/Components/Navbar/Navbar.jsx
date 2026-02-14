@@ -33,15 +33,14 @@ function Navbar() {
                 Home
               </Link>
 
-              <Link className="text-black hover:text-cyan-600 transition" to="/academies">
+              <Link className="text-black hover:text-cyan-600 transition" to="/academis">
                 Academies
               </Link>
 
-              <a className="text-black hover:text-cyan-600 transition" href="#about">
+              <a className="text-black hover:text-cyan-600 transition" href="/about">
                 About Us
               </a>
-
-              <a className="text-black hover:text-cyan-600 transition" href="#contact">
+              <a className="text-black hover:text-cyan-600 transition" href="/Contactus">
                 Contact
               </a>
 
@@ -77,12 +76,10 @@ function Navbar() {
               <Link className="block text-black" to="/">
                 Home
               </Link>
-
-              <Link className="block text-black" to="/academies">
+              <Link className="block text-black" to="/academis">
                 Academies
               </Link>
-
-              <a className="block text-black" href="#about">
+              <a className="block text-black" href="/about">
                 About
               </a>
 
