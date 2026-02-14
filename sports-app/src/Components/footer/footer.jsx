@@ -76,7 +76,7 @@ const Footer = () => {
 
   <ul className="space-y-2 text-sm">
     {[
-      { id: 1, name: "🏏 Cricket Academy" },
+      { id: 1, name: "🏏 Cricket Academy"  },
       { id: 2, name: "⚽ Football Academy" },
       { id: 3, name: "🏀 Basketball Training" },
       { id: 4, name: "🏸 Badminton Coaching" },
