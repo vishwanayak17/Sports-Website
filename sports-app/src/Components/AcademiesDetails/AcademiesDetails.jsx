@@ -19,8 +19,8 @@ function AcademiesDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
- const academy = academiesFullData.find(
-  (item) => item.id === Number(id)
+const academy = academiesFullData.find(
+  (item) => item.id === id
 );
 
 
