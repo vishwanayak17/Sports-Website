@@ -5,7 +5,7 @@ const Signup = ({ isOpen, onClose }) => {
     academyName: "",
     city: "",
     area: "",
-    sport: "",
+    sport: [],
     phone: "",
     email: "",
     description: "",
@@ -39,6 +39,21 @@ const Signup = ({ isOpen, onClose }) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // ✅ MULTIPLE SPORTS SELECT
+  const handleSportChange = (sport) => {
+    if (form.sport.includes(sport)) {
+      setForm({
+        ...form,
+        sport: form.sport.filter((s) => s !== sport),
+      });
+    } else {
+      setForm({
+        ...form,
+        sport: [...form.sport, sport],
+      });
+    }
+  };
+
   const handleFacilityChange = (facility) => {
     if (form.facilities.includes(facility)) {
       setForm({
@@ -56,12 +71,12 @@ const Signup = ({ isOpen, onClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert("Academy Registered Successfully 🎉");
+    console.log(form);
   };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 backdrop-blur-sm bg-black/20">
 
-      {/* Modal Box (WIDER + RESPONSIVE) */}
       <div className="relative w-[90%] max-w-[520px] max-h-[90vh] overflow-y-auto p-8 rounded-3xl shadow-2xl bg-white/90 backdrop-blur-md border border-white/40 animate-scaleIn">
 
         {/* Close Button */}
@@ -93,20 +108,24 @@ const Signup = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* City + Area */}
+          {/* City (RADIO BUTTON) + Area */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm text-gray-600">City</label>
-              <select
-                name="city"
-                className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                onChange={handleChange}
-                required
-              >
-                <option value="">Select City</option>
-                <option>Ahmedabad</option>
-                <option>Gandhinagar</option>
-              </select>
+              <div className="mt-2 flex flex-col gap-1 text-sm">
+                {["Ahmedabad", "Gandhinagar"].map((city, i) => (
+                  <label key={i} className="flex items-center gap-2">
+                    <input
+                      type="radio"
+                      name="city"
+                      value={city}
+                      onChange={handleChange}
+                      required
+                    />
+                    {city}
+                  </label>
+                ))}
+              </div>
             </div>
 
             <div>
@@ -121,20 +140,20 @@ const Signup = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Sport */}
+          {/* SPORT (CHECKBOX MULTI SELECT) */}
           <div>
             <label className="text-sm text-gray-600">Sport Type</label>
-            <select
-              name="sport"
-              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              onChange={handleChange}
-              required
-            >
-              <option value="">Select Sport</option>
+            <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
               {sportsList.map((sport, i) => (
-                <option key={i}>{sport}</option>
+                <label key={i} className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    onChange={() => handleSportChange(sport)}
+                  />
+                  {sport}
+                </label>
               ))}
-            </select>
+            </div>
           </div>
 
           {/* Phone + Email */}
@@ -203,7 +222,7 @@ const Signup = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <button
             type="submit"
             className="w-full py-3 mt-2 rounded-full font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 transition duration-300 shadow-lg"

@@ -35,35 +35,25 @@ function Academies() {
 
   // 🔍 Search Function
   const handleSearch = () => {
-    navigate(`/academies?city=${locationValue}&sport=${sportValue}`);
+    navigate(`/academis?city=${locationValue}&sport=${sportValue}`);
   };
 
   return (
     <section className="py-14 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-6 space-y-10">
-
-        {/* 🔙 Back Button */}
-        <button
-          onClick={() => navigate("/")}
-          className="mt-6 flex items-center gap-2 text-cyan-600 font-medium hover:underline cursor-pointer"
-        >
-          <FaArrowLeft />
-          Back to Home
-        </button>
-
         {/* 🔥 Heading */}
-        <div className="text-center space-y-2">
+        <div className=" mt-12 text-center space-y-2">
           <h1 className="text-4xl font-bold text-gray-800">
             Sports Academies Directory
           </h1>
-          <p className="text-gray-500">
+          <p className=" mt-4 text-gray-500">
             Ahmedabad & Gandhinagar Sports Academies at one place
           </p>
         </div>
 
        {/* ✅ SEARCH BOX */}
 <div className="flex justify-center">
-  <div className="bg-white rounded-2xl shadow-xl px-6 py-5 w-full max-w-[720px] flex flex-col md:flex-row items-center gap-4 border">
+  <div className="bg-white rounded-2xl shadow-xl px-6 py-5 w-full max-w-[720px] flex flex-col md:flex-row items-center gap-4">
 
     {/* 🏅 Sport Input Style Dropdown */}
     <div className="relative w-full md:w-[240px]">

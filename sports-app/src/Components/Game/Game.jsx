@@ -50,12 +50,12 @@ function Game() {
               className="w-full sm:w-1/2 lg:w-1/3 px-4 flex-shrink-0"
             >
               <div
-                onClick={() => navigate(`/academies?sport=${game.name}`)}
+                onClick={() => navigate(`/academis?sport=${game.name}`)}
                 className={`
                   h-[240px]
                   rounded-3xl
                   bg-gradient-to-br ${game.color}
-                  flex flex-col items-center justify-center
+                  flex flex-col items-center justify-center 
                   text-white
                   shadow-xl
                   hover:scale-105
