@@ -8,7 +8,7 @@ import {
 
 const Contact = () => {
   return (
-    <div className="bg-gray-50 text-gray-800 min-h-screen">
+    <div className="bg-gray-50 text-gray-800 min-h-screen mt-16">
 
       <div className="max-w-7xl mx-auto px-6">
 

@@ -76,15 +76,16 @@ const Footer = () => {
 
   <ul className="space-y-2 text-sm">
     {[
-  { id: "ahd-cricket", name: "🏏 Cricket Academy" },
-  { id: "ahd-football", name: "⚽ Football Academy" },
-  { id: "ahd-basketball", name: "🏀 Basketball Training" },
-  { id: "ahd-badminton", name: "🏸 Badminton Coaching" },
-  { id: "ahd-swimming", name: "🏊 Swimming Classes" },
-].map((sport) => (
+  { sport: "Cricket", name: "🏏 Cricket Academy" },
+  { sport: "Football", name: "⚽ Football Academy" },
+  { sport: "Basketball", name: "🏀 Basketball Training" },
+  { sport: "Badminton", name: "🏸 Badminton Coaching" },
+  { sport: "Swimming", name: "🏊 Swimming Classes" },
+]
+.map((sport) => (
       <li key={sport.id}>
         <Link
-          to={`/academy/${sport.id}`}
+          to={`/academis?sport=${sport.sport}`}
           className="hover:text-white hover:translate-x-1 transition cursor-pointer block"
         >
           {sport.name}

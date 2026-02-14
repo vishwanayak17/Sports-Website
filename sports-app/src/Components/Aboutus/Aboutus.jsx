@@ -1,8 +1,58 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+
+/* ✅ Counter Component */
+const Counter = ({ target, duration = 2000, start }) => {
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!start) return;
+
+    let startValue = 0;
+    const increment = target / (duration / 20);
+
+    const timer = setInterval(() => {
+      startValue += increment;
+
+      if (startValue >= target) {
+        setCount(target);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(startValue));
+      }
+    }, 20);
+
+    return () => clearInterval(timer);
+  }, [start, target, duration]);
+
+  return <span>{count}+</span>;
+};
 
 const AboutSportsAcademy = () => {
+  const navigate = useNavigate();
+  const statsRef = useRef();
+  const [visible, setVisible] = useState(false);
+
+  /* ✅ Detect when stats visible */
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    if (statsRef.current) observer.observe(statsRef.current);
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <div className="bg-gray-100 min-h-screen py-16 px-4">
+    <div className="bg-gray-100 min-h-screen py-16 px-4 mt-16">
 
       {/* PAGE TITLE */}
       <div className="text-center mb-12">
@@ -41,9 +91,13 @@ const AboutSportsAcademy = () => {
               fitness, teamwork, and sportsmanship.
             </p>
 
-            <button className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition">
-              Join Our Academy
-            </button>
+          <button
+  onClick={() => navigate("/academis")}
+  className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition"
+>
+  Join Our Academy
+</button>
+
           </div>
 
         </div>
@@ -51,7 +105,7 @@ const AboutSportsAcademy = () => {
 
       {/* MISSION VISION */}
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-8 mb-16">
-        
+
         <div className="bg-white p-8 rounded-2xl shadow-xl hover:shadow-2xl transition">
           <h2 className="text-2xl font-bold mb-3 text-blue-600">Our Mission</h2>
           <p className="text-gray-600">
@@ -118,25 +172,36 @@ const AboutSportsAcademy = () => {
         </div>
       </div>
 
-      {/* STATS */}
-      <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mt-16">
+      {/* ✅ STATS WITH SCROLL COUNTER */}
+      <div
+        ref={statsRef}
+        className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 mt-16"
+      >
         <div className="bg-white rounded-xl shadow-xl p-6 text-center">
-          <h3 className="text-3xl font-bold text-blue-600">500+</h3>
+          <h3 className="text-3xl font-bold text-blue-600">
+            <Counter target={500} start={visible} />
+          </h3>
           <p className="text-gray-600">Students</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-xl p-6 text-center">
-          <h3 className="text-3xl font-bold text-blue-600">20+</h3>
+          <h3 className="text-3xl font-bold text-blue-600">
+            <Counter target={20} start={visible} />
+          </h3>
           <p className="text-gray-600">Coaches</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-xl p-6 text-center">
-          <h3 className="text-3xl font-bold text-blue-600">10+</h3>
+          <h3 className="text-3xl font-bold text-blue-600">
+            <Counter target={10} start={visible} />
+          </h3>
           <p className="text-gray-600">Sports</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-xl p-6 text-center">
-          <h3 className="text-3xl font-bold text-blue-600">15+</h3>
+          <h3 className="text-3xl font-bold text-blue-600">
+            <Counter target={15} start={visible} />
+          </h3>
           <p className="text-gray-600">Years Experience</p>
         </div>
       </div>
