@@ -35,7 +35,7 @@ function Academies() {
 
   // 🔍 Search Function
   const handleSearch = () => {
-    navigate(`/academies?city=${locationValue}&sport=${sportValue}`);
+    navigate(`/academis?city=${locationValue}&sport=${sportValue}`);
   };
 
   return (
