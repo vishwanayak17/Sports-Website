@@ -37,7 +37,7 @@ function AcademiesDetails() {
           {/* BACK BUTTON */}
           <button
             onClick={() => navigate("/academies")}
-            className=" mt-6 flex items-center gap-2 text-gray-700 font-medium mb-4 hover:text-blue-600"
+            className=" mt-12 flex items-center gap-2 text-gray-700 font-medium mb-4 hover:text-blue-600"
           >
             <FaArrowLeft /> Back to Academies
           </button>

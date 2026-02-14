@@ -5,6 +5,7 @@ import Academies from "./Components/Academies/Academies";
  import Home from "./Components/Home/Home";
 //import OwnerDashboard from "./Components/Dashboard/OwnerDashboard"; // Owner dashboard design
 //import AdminDashboard from "./Components/Dashboard/AdminDashboard";
+import Navbar from "./Components/Navbar/Navbar";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
    
       {
       <Router>
+        <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/academies" element={<Academies />} />

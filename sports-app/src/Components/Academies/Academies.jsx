@@ -45,7 +45,7 @@ function Academies() {
         {/* 🔙 Back Button */}
         <button
           onClick={() => navigate("/")}
-          className="mt-6 flex items-center gap-2 text-cyan-600 font-medium hover:underline cursor-pointer"
+          className="mt-10 flex items-center gap-2 text-cyan-600 font-medium hover:underline cursor-pointer"
         >
           <FaArrowLeft />
           Back to Home
@@ -63,7 +63,7 @@ function Academies() {
 
        {/* ✅ SEARCH BOX */}
 <div className="flex justify-center">
-  <div className="bg-white rounded-2xl shadow-xl px-6 py-5 w-full max-w-[720px] flex flex-col md:flex-row items-center gap-4 border">
+  <div className="bg-white rounded-2xl shadow-xl px-6 py-5 w-full max-w-[720px] flex flex-col md:flex-row items-center gap-4">
 
     {/* 🏅 Sport Input Style Dropdown */}
     <div className="relative w-full md:w-[240px]">
