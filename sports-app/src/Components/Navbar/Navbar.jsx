@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/sportimg.png";
-import Login from "../Login/Login"; // adjust path if needed
+import Login from "../Login/Login";
+import Signup from "../Signup/Signup";   // ✅ NEW IMPORT
 
 function Navbar() {
   const [open, setOpen] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
+  const [showSignup, setShowSignup] = useState(false); // ✅ NEW STATE
 
   return (
     <>
@@ -45,18 +47,17 @@ function Navbar() {
               {/* Login Button */}
               <button
                 onClick={() => setShowLogin(true)}
-                className="
-                  px-5 py-2.5
-                  rounded-full
-                  font-medium
-                  text-white
-                  bg-gradient-to-r from-cyan-400 to-blue-600
-                  hover:from-cyan-500 hover:to-blue-700
-                  transition
-                  shadow
-                "
+                className="px-5 py-2.5 rounded-full font-medium text-white bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-500 hover:to-blue-700 transition shadow"
               >
                 Login
+              </button>
+
+              {/* Signup Button */}
+              <button
+                onClick={() => setShowSignup(true)}   // ✅ OPEN SIGNUP
+                className="px-5 py-2.5 rounded-full font-medium text-white bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-500 hover:to-blue-700 transition shadow"
+              >
+                Signup as an Academy
               </button>
             </div>
 
@@ -81,31 +82,34 @@ function Navbar() {
               <a className="block text-black" href="/about">
                 About
               </a>
+
               <a className="block text-black" href="#contact">
                 Contact
               </a>
 
-            <button
-            type="button"
-  onClick={() => {
-    setShowLogin(true);
-    setOpen(false);
-  }}
-  className="
-    block w-full text-center
-    py-2.5
-    rounded-full
-    font-medium
-    text-white
-    bg-gradient-to-r from-cyan-400 to-blue-600
-    hover:from-cyan-500 hover:to-blue-700
-    transition
-    !cursor-pointer
-  "
->
-  Login
-</button>
+              {/* Login Mobile */}
+              <button
+                type="button"
+                onClick={() => {
+                  setShowLogin(true);
+                  setOpen(false);
+                }}
+                className="block w-full text-center py-2.5 rounded-full font-medium text-white bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-500 hover:to-blue-700 transition"
+              >
+                Login
+              </button>
 
+              {/* Signup Mobile */}
+              <button
+                type="button"
+                onClick={() => {
+                  setShowSignup(true);   // ✅ OPEN SIGNUP
+                  setOpen(false);
+                }}
+                className="block w-full text-center py-2.5 rounded-full font-medium text-white bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-500 hover:to-blue-700 transition"
+              >
+                Signup as an Academy
+              </button>
             </div>
           )}
         </div>
@@ -113,6 +117,9 @@ function Navbar() {
 
       {/* Login Modal */}
       <Login isOpen={showLogin} onClose={() => setShowLogin(false)} />
+
+      {/* Signup Modal */}
+      <Signup isOpen={showSignup} onClose={() => setShowSignup(false)} />  {/* ✅ NEW */}
     </>
   );
 }

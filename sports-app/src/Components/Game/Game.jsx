@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const games = [
   { name: "Cricket", icon: "🏏", color: "from-green-400 to-emerald-600" },
@@ -16,8 +17,8 @@ const games = [
 
 function Game() {
   const [index, setIndex] = useState(0);
+  const navigate = useNavigate();
 
-  // auto slide every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % games.length);
@@ -27,7 +28,6 @@ function Game() {
 
   return (
     <section className="py-20 bg-slate-50 overflow-hidden">
-      {/* Heading */}
       <div className="text-center mb-14 px-4">
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
           Explore Sports Categories
@@ -37,7 +37,6 @@ function Game() {
         </p>
       </div>
 
-      {/* Slider */}
       <div className="max-w-7xl mx-auto overflow-hidden px-6">
         <div
           className="flex transition-transform duration-700 ease-in-out"
@@ -48,15 +47,10 @@ function Game() {
           {games.map((game, i) => (
             <div
               key={i}
-              className="
-                w-full
-                sm:w-1/2
-                lg:w-1/3
-                px-4
-                flex-shrink-0
-              "
+              className="w-full sm:w-1/2 lg:w-1/3 px-4 flex-shrink-0"
             >
               <div
+                onClick={() => navigate(`/academies?sport=${game.name}`)}
                 className={`
                   h-[240px]
                   rounded-3xl
