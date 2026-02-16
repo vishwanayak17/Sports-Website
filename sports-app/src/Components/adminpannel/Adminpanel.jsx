@@ -17,7 +17,7 @@ export default function SportsAdminPanel() {
   const [open, setOpen] = useState(true);
 
   return (
-    <div className="flex min-h-screen bg-slate-100">
+    <div className="flex min-h-screen bg-slate-100 mt-20">
       {/* SIDEBAR */}
       <motion.aside
         animate={{ width: open ? 260 : 80 }}
