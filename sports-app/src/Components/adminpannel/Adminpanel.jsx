@@ -104,67 +104,80 @@ function Dashboard() {
 
       {/* STATS */}
       <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <Card title="Total Players" value="1240" />
         <Card title="Total Academies" value="18" />
-        <Card title="Revenue" value="₹2,45,000" />
-        <Card title="Active Coaches" value="22" />
-      </div>
-
-      {/* CHART + PROGRESS */}
-      <div className="grid lg:grid-cols-3 gap-6">
-
-        <div className="lg:col-span-2 bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-          <h3 className="font-semibold mb-4">Performance Overview</h3>
-          <div className="h-64 border rounded-xl flex items-center justify-center text-gray-400">
-            Chart Coming Soon
-          </div>
-        </div>
-
-        <div className="bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-          <h3 className="font-semibold mb-4">Academy Performance</h3>
-          <Progress label="Cricket Academy" value={85} />
-          <Progress label="Football Academy" value={70} />
-          <Progress label="Badminton Academy" value={60} />
-        </div>
-
       </div>
 
       {/* ACADEMY TABLE */}
-      <div className="bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-        <h3 className="font-semibold mb-4">Academy List</h3>
+      <div className="bg-white p-4 rounded-xl shadow-md">
+        <h2 className="text-lg font-semibold mb-4">Academy Request</h2>
 
-        <table className="w-full text-left">
-          <thead className="text-gray-500 text-sm border-b">
+        <table className="w-full text-left border-collapse">
+          <thead>
             <tr>
-              <th className="pb-2">Academy</th>
-              <th className="pb-2">City</th>
-              <th className="pb-2">Sport</th>
-              <th className="pb-2">Status</th>
+              <th className="border-b p-2">Name</th>
+              <th className="border-b p-2">City</th>
+              <th className="border-b p-2">Sports</th>
+              <th className="border-b p-2">Status / Action</th>
             </tr>
           </thead>
 
           <tbody className="text-sm">
-            <Row name="Ahmedabad Cricket Academy" city="Ahmedabad" sport="Cricket" status="Active" />
-            <Row name="Gandhinagar Football Club" city="Gandhinagar" sport="Football" status="Pending" />
-            <Row name="Ace Badminton Academy" city="Ahmedabad" sport="Badminton" status="Active" />
+            <Row name="Ahmedabad Cricket Academy" city="Ahmedabad" sport="Cricket" />
+            <Row name="Gandhinagar Football Club" city="Gandhinagar" sport="Football" />
+            <Row name="Ace Badminton Academy" city="Ahmedabad" sport="Badminton" />
           </tbody>
         </table>
-      </div>
-
-      {/* ACTIVITY */}
-      <div className="bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-        <h3 className="font-semibold mb-4">Recent Activity</h3>
-        <Timeline text="New academy registered" />
-        <Timeline text="Player joined training batch" />
-        <Timeline text="Coach added to academy" />
-        <Timeline text="Revenue updated" />
       </div>
 
     </div>
   );
 }
 
-/* ================= COMPONENTS ================= */
+/* ================= TABLE ROW WITH BUTTONS ================= */
+
+function Row({ name, city, sport }) {
+  const [status, setStatus] = useState("Pending");
+
+  return (
+    <tr className="border-b hover:bg-gray-50">
+      <td className="py-2">{name}</td>
+      <td>{city}</td>
+      <td>{sport}</td>
+
+      <td className="py-2">
+        {status === "Pending" ? (
+          <div className="flex gap-2">
+            <button
+              onClick={() => setStatus("Active")}
+              className="px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Accept
+            </button>
+
+            <button
+              onClick={() => setStatus("Rejected")}
+              className="px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Reject
+            </button>
+          </div>
+        ) : (
+          <span
+            className={`px-3 py-1 text-xs rounded font-semibold ${
+              status === "Active"
+                ? "bg-green-100 text-green-600"
+                : "bg-red-100 text-red-600"
+            }`}
+          >
+            {status}
+          </span>
+        )}
+      </td>
+    </tr>
+  );
+}
+
+/* ================= OTHER COMPONENTS ================= */
 
 function Card({ title, value }) {
   return (
@@ -172,44 +185,6 @@ function Card({ title, value }) {
       <p className="text-gray-500 text-sm">{title}</p>
       <h3 className="text-2xl font-bold mt-1">{value}</h3>
     </div>
-  );
-}
-
-function Progress({ label, value }) {
-  return (
-    <div className="mb-4">
-      <div className="flex justify-between text-sm mb-1">
-        <span>{label}</span>
-        <span>{value}%</span>
-      </div>
-      <div className="w-full bg-gray-200 rounded-full h-2">
-        <div
-          className="bg-blue-600 h-2 rounded-full"
-          style={{ width: `${value}%` }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function Timeline({ text }) {
-  return (
-    <div className="border-l-2 border-blue-500 pl-3 py-2 text-sm">
-      {text}
-    </div>
-  );
-}
-
-function Row({ name, city, sport, status }) {
-  return (
-    <tr className="border-b hover:bg-gray-50">
-      <td className="py-2">{name}</td>
-      <td>{city}</td>
-      <td>{sport}</td>
-      <td className={status === "Active" ? "text-green-600" : "text-red-600"}>
-        {status}
-      </td>
-    </tr>
   );
 }
 
