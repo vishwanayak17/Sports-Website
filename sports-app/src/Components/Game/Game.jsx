@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const games = [
+<<<<<<< HEAD
   {
     name: "Cricket",
     icon: "🏏",
@@ -56,6 +58,8 @@ const games = [
     icon: "🥋",
     color: "from-gray-700 to-gray-900",
   },
+=======
+>>>>>>> 0045eed090aedee2d9b96ef7652ecb9b7691f254
   { name: "Cricket", icon: "🏏", color: "from-green-400 to-emerald-600" },
   { name: "Football", icon: "⚽", color: "from-yellow-400 to-orange-500" },
   { name: "Badminton", icon: "🏸", color: "from-purple-400 to-pink-500" },
@@ -71,20 +75,27 @@ const games = [
 
 function Game() {
   const [index, setIndex] = useState(0);
+  const navigate = useNavigate();
 
-  // auto slide every 3 seconds
   useEffect(() => {
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % games.length);
     }, 3000);
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0045eed090aedee2d9b96ef7652ecb9b7691f254
     return () => clearInterval(interval);
   }, []);
 
   return (
     <section className="py-20 bg-slate-50 overflow-hidden">
+<<<<<<< HEAD
       {/* Heading */}
       <div className="text-center mb-12 px-4">
+=======
+      <div className="text-center mb-14 px-4">
+>>>>>>> 0045eed090aedee2d9b96ef7652ecb9b7691f254
         <h2 className="text-3xl md:text-4xl font-bold text-gray-800">
           Explore Sports Categories
         </h2>
@@ -93,17 +104,26 @@ function Game() {
         </p>
       </div>
 
+<<<<<<< HEAD
       {/* Slider */}
       <div className="max-w-6xl mx-auto overflow-hidden">
         <div
           className="flex transition-transform duration-700 ease-in-out"
           style={{
             transform: `translateX(-${index * 300}px)`,
+=======
+      <div className="max-w-7xl mx-auto overflow-hidden px-6">
+        <div
+          className="flex transition-transform duration-700 ease-in-out"
+          style={{
+            transform: `translateX(-${index * (100 / 3)}%)`,
+>>>>>>> 0045eed090aedee2d9b96ef7652ecb9b7691f254
           }}
         >
           {games.map((game, i) => (
             <div
               key={i}
+<<<<<<< HEAD
               className="
                 w-full
                 sm:w-1/2
@@ -111,13 +131,17 @@ function Game() {
                 px-4
                 flex-shrink-0
               "
+=======
+              className="w-full sm:w-1/2 lg:w-1/3 px-4 flex-shrink-0"
+>>>>>>> 0045eed090aedee2d9b96ef7652ecb9b7691f254
             >
               <div
+                onClick={() => navigate(`/academis?sport=${game.name}`)}
                 className={`
                   h-[240px]
                   rounded-3xl
                   bg-gradient-to-br ${game.color}
-                  flex flex-col items-center justify-center
+                  flex flex-col items-center justify-center 
                   text-white
                   shadow-xl
                   hover:scale-105
@@ -125,8 +149,13 @@ function Game() {
                   cursor-pointer
                 `}
               >
+<<<<<<< HEAD
                 <span className="text-6xl mb-4">{game.icon}</span>
                 <h3 className="text-xl font-semibold tracking-wide">
+=======
+                <span className="text-6xl mb-5">{game.icon}</span>
+                <h3 className="text-2xl font-semibold tracking-wide">
+>>>>>>> 0045eed090aedee2d9b96ef7652ecb9b7691f254
                   {game.name}
                 </h3>
               </div>
