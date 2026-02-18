@@ -9,6 +9,7 @@ import {
   Search,
 } from "lucide-react";
 
+import Tablelist from "../Tablelist/Tablelist";
 import logo from "../../assets/sportimg.png";
 
 export default function SportsAdminPanel() {
@@ -16,7 +17,7 @@ export default function SportsAdminPanel() {
   const [active, setActive] = useState("Dashboard");
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 mt-20">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
 
       {/* SIDEBAR */}
       <motion.aside
@@ -56,10 +57,18 @@ export default function SportsAdminPanel() {
           </div>
         </header>
 
-        <main className="p-6">
-          {active === "Dashboard" && <Dashboard />}
-          {active === "Academies" && <Page title="Academies Management" />}
-          {active === "Settings" && <Page title="Admin Settings" />}
+        {/* CONTENT */}
+        <main className="p-6 overflow-y-auto">
+
+          {/* ================= DASHBOARD ================= */}
+          {active === "Dashboard" && <DashboardSection />}
+
+          {/* ================= ACADEMIES ================= */}
+          {active === "Academies" && <Tablelist />}
+
+          {/* ================= SETTINGS ================= */}
+          {active === "Settings" && <SettingsSection />}
+
         </main>
 
       </div>
@@ -67,8 +76,7 @@ export default function SportsAdminPanel() {
   );
 }
 
-/* ================= MENU ================= */
-
+/* ================= MENU ITEM ================= */
 function MenuItem({ icon, label, open, active, setActive }) {
   return (
     <div
@@ -82,141 +90,70 @@ function MenuItem({ icon, label, open, active, setActive }) {
   );
 }
 
-/* ================= DASHBOARD ================= */
-
-function Dashboard() {
+/* ================= DASHBOARD SECTION ================= */
+function DashboardSection() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
 
-      {/* HERO */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-3xl shadow-lg flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold">Welcome Admin 👋</h2>
-          <p className="opacity-90 text-sm mt-1">
-            Manage your sports academies and performance
-          </p>
+      <h2 className="text-2xl font-bold text-gray-700">Admin Dashboard</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div className="bg-blue-100 p-6 rounded-xl shadow">
+          <h3 className="font-semibold text-blue-700">Total Academies</h3>
+          <p className="text-3xl font-bold mt-2">25</p>
         </div>
 
-        <button className="bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold">
-          + New Academy
-        </button>
-      </div>
-
-      {/* STATS */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <Card title="Total Players" value="1240" />
-        <Card title="Total Academies" value="18" />
-        <Card title="Revenue" value="₹2,45,000" />
-        <Card title="Active Coaches" value="22" />
-      </div>
-
-      {/* CHART + PROGRESS */}
-      <div className="grid lg:grid-cols-3 gap-6">
-
-        <div className="lg:col-span-2 bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-          <h3 className="font-semibold mb-4">Performance Overview</h3>
-          <div className="h-64 border rounded-xl flex items-center justify-center text-gray-400">
-            Chart Coming Soon
-          </div>
+        <div className="bg-yellow-100 p-6 rounded-xl shadow">
+          <h3 className="font-semibold text-yellow-700">Pending</h3>
+          <p className="text-3xl font-bold mt-2">6</p>
         </div>
 
-        <div className="bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-          <h3 className="font-semibold mb-4">Academy Performance</h3>
-          <Progress label="Cricket Academy" value={85} />
-          <Progress label="Football Academy" value={70} />
-          <Progress label="Badminton Academy" value={60} />
+        <div className="bg-red-100 p-6 rounded-xl shadow">
+          <h3 className="font-semibold text-red-700">Rejected</h3>
+          <p className="text-3xl font-bold mt-2">3</p>
         </div>
 
       </div>
 
-      {/* ACADEMY TABLE */}
-      <div className="bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-        <h3 className="font-semibold mb-4">Academy List</h3>
-
-        <table className="w-full text-left">
-          <thead className="text-gray-500 text-sm border-b">
-            <tr>
-              <th className="pb-2">Academy</th>
-              <th className="pb-2">City</th>
-              <th className="pb-2">Sport</th>
-              <th className="pb-2">Status</th>
-            </tr>
-          </thead>
-
-          <tbody className="text-sm">
-            <Row name="Ahmedabad Cricket Academy" city="Ahmedabad" sport="Cricket" status="Active" />
-            <Row name="Gandhinagar Football Club" city="Gandhinagar" sport="Football" status="Pending" />
-            <Row name="Ace Badminton Academy" city="Ahmedabad" sport="Badminton" status="Active" />
-          </tbody>
-        </table>
-      </div>
-
-      {/* ACTIVITY */}
-      <div className="bg-white/70 backdrop-blur p-6 rounded-3xl shadow">
-        <h3 className="font-semibold mb-4">Recent Activity</h3>
-        <Timeline text="New academy registered" />
-        <Timeline text="Player joined training batch" />
-        <Timeline text="Coach added to academy" />
-        <Timeline text="Revenue updated" />
+      <div className="bg-white p-5 rounded-xl shadow">
+        <h3 className="font-semibold mb-3">Recent Activity</h3>
+        <ul className="text-sm text-gray-600 space-y-2">
+          <li>✔ Star Cricket Academy approved</li>
+          <li>⏳ Elite Football pending</li>
+          <li>❌ Ace Badminton rejected</li>
+        </ul>
       </div>
 
     </div>
   );
 }
 
-/* ================= COMPONENTS ================= */
-
-function Card({ title, value }) {
+/* ================= SETTINGS SECTION ================= */
+function SettingsSection() {
   return (
-    <div className="bg-white/60 backdrop-blur p-5 rounded-2xl shadow">
-      <p className="text-gray-500 text-sm">{title}</p>
-      <h3 className="text-2xl font-bold mt-1">{value}</h3>
-    </div>
-  );
-}
+    <div className="space-y-6 max-w-2xl">
 
-function Progress({ label, value }) {
-  return (
-    <div className="mb-4">
-      <div className="flex justify-between text-sm mb-1">
-        <span>{label}</span>
-        <span>{value}%</span>
+      <h2 className="text-2xl font-bold">Admin Settings</h2>
+
+      <div className="bg-white p-5 rounded-2xl shadow space-y-4">
+        <h3 className="font-semibold">Profile</h3>
+        <input className="w-full border p-2 rounded" placeholder="Admin Name" />
+        <input className="w-full border p-2 rounded" placeholder="Email" />
+        <input className="w-full border p-2 rounded" placeholder="Phone" />
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-2">
-        <div
-          className="bg-blue-600 h-2 rounded-full"
-          style={{ width: `${value}%` }}
-        />
+
+      <div className="bg-white p-5 rounded-2xl shadow space-y-4">
+        <h3 className="font-semibold">Controls</h3>
+        <label className="flex justify-between">
+          Auto Approve
+          <input type="checkbox" />
+        </label>
       </div>
-    </div>
-  );
-}
 
-function Timeline({ text }) {
-  return (
-    <div className="border-l-2 border-blue-500 pl-3 py-2 text-sm">
-      {text}
-    </div>
-  );
-}
-
-function Row({ name, city, sport, status }) {
-  return (
-    <tr className="border-b hover:bg-gray-50">
-      <td className="py-2">{name}</td>
-      <td>{city}</td>
-      <td>{sport}</td>
-      <td className={status === "Active" ? "text-green-600" : "text-red-600"}>
-        {status}
-      </td>
-    </tr>
-  );
-}
-
-function Page({ title }) {
-  return (
-    <div className="bg-white p-6 rounded-3xl shadow">
-      <h2 className="text-2xl font-bold">{title}</h2>
+      <button className="bg-blue-600 text-white px-5 py-2 rounded-lg">
+        Save Settings
+      </button>
     </div>
   );
 }
