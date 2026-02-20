@@ -9,6 +9,7 @@ import {
   Search,
 } from "lucide-react";
 
+import Tablelist from "../Tablelist/Tablelist";
 import logo from "../../assets/sportimg.png";
 
 export default function SportsAdminPanel() {
@@ -16,7 +17,7 @@ export default function SportsAdminPanel() {
   const [active, setActive] = useState("Dashboard");
 
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-100 to-slate-200 mt-20">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
 
       {/* SIDEBAR */}
       <motion.aside
@@ -56,10 +57,18 @@ export default function SportsAdminPanel() {
           </div>
         </header>
 
-        <main className="p-6">
-          {active === "Dashboard" && <Dashboard />}
-          {active === "Academies" && <Page title="Academies Management" />}
-          {active === "Settings" && <Page title="Admin Settings" />}
+        {/* CONTENT */}
+        <main className="p-6 overflow-y-auto">
+
+          {/* ================= DASHBOARD ================= */}
+          {active === "Dashboard" && <DashboardSection />}
+
+          {/* ================= ACADEMIES ================= */}
+          {active === "Academies" && <Tablelist />}
+
+          {/* ================= SETTINGS ================= */}
+          {active === "Settings" && <SettingsSection />}
+
         </main>
 
       </div>
@@ -67,8 +76,7 @@ export default function SportsAdminPanel() {
   );
 }
 
-/* ================= MENU ================= */
-
+/* ================= MENU ITEM ================= */
 function MenuItem({ icon, label, open, active, setActive }) {
   return (
     <div
@@ -82,116 +90,70 @@ function MenuItem({ icon, label, open, active, setActive }) {
   );
 }
 
-/* ================= DASHBOARD ================= */
-
-function Dashboard() {
+/* ================= DASHBOARD SECTION ================= */
+function DashboardSection() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
 
-      {/* HERO */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 rounded-3xl shadow-lg flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold">Welcome Admin 👋</h2>
-          <p className="opacity-90 text-sm mt-1">
-            Manage your sports academies and performance
-          </p>
+      <h2 className="text-2xl font-bold text-gray-700">Admin Dashboard</h2>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+        <div className="bg-blue-100 p-6 rounded-xl shadow">
+          <h3 className="font-semibold text-blue-700">Total Academies</h3>
+          <p className="text-3xl font-bold mt-2">25</p>
         </div>
 
-        <button className="bg-white text-blue-600 px-4 py-2 rounded-lg text-sm font-semibold">
-          + New Academy
-        </button>
+        <div className="bg-yellow-100 p-6 rounded-xl shadow">
+          <h3 className="font-semibold text-yellow-700">Pending</h3>
+          <p className="text-3xl font-bold mt-2">6</p>
+        </div>
+
+        <div className="bg-red-100 p-6 rounded-xl shadow">
+          <h3 className="font-semibold text-red-700">Rejected</h3>
+          <p className="text-3xl font-bold mt-2">3</p>
+        </div>
+
       </div>
 
-      {/* STATS */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-        <Card title="Total Academies" value="18" />
-      </div>
-
-      {/* ACADEMY TABLE */}
-      <div className="bg-white p-4 rounded-xl shadow-md">
-        <h2 className="text-lg font-semibold mb-4">Academy Request</h2>
-
-        <table className="w-full text-left border-collapse">
-          <thead>
-            <tr>
-              <th className="border-b p-2">Name</th>
-              <th className="border-b p-2">City</th>
-              <th className="border-b p-2">Sports</th>
-              <th className="border-b p-2">Status / Action</th>
-            </tr>
-          </thead>
-
-          <tbody className="text-sm">
-            <Row name="Ahmedabad Cricket Academy" city="Ahmedabad" sport="Cricket" />
-            <Row name="Gandhinagar Football Club" city="Gandhinagar" sport="Football" />
-            <Row name="Ace Badminton Academy" city="Ahmedabad" sport="Badminton" />
-          </tbody>
-        </table>
+      <div className="bg-white p-5 rounded-xl shadow">
+        <h3 className="font-semibold mb-3">Recent Activity</h3>
+        <ul className="text-sm text-gray-600 space-y-2">
+          <li>✔ Star Cricket Academy approved</li>
+          <li>⏳ Elite Football pending</li>
+          <li>❌ Ace Badminton rejected</li>
+        </ul>
       </div>
 
     </div>
   );
 }
 
-/* ================= TABLE ROW WITH BUTTONS ================= */
-
-function Row({ name, city, sport }) {
-  const [status, setStatus] = useState("Pending");
-
+/* ================= SETTINGS SECTION ================= */
+function SettingsSection() {
   return (
-    <tr className="border-b hover:bg-gray-50">
-      <td className="py-2">{name}</td>
-      <td>{city}</td>
-      <td>{sport}</td>
+    <div className="space-y-6 max-w-2xl">
 
-      <td className="py-2">
-        {status === "Pending" ? (
-          <div className="flex gap-2">
-            <button
-              onClick={() => setStatus("Active")}
-              className="px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600"
-            >
-              Accept
-            </button>
+      <h2 className="text-2xl font-bold">Admin Settings</h2>
 
-            <button
-              onClick={() => setStatus("Rejected")}
-              className="px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600"
-            >
-              Reject
-            </button>
-          </div>
-        ) : (
-          <span
-            className={`px-3 py-1 text-xs rounded font-semibold ${
-              status === "Active"
-                ? "bg-green-100 text-green-600"
-                : "bg-red-100 text-red-600"
-            }`}
-          >
-            {status}
-          </span>
-        )}
-      </td>
-    </tr>
-  );
-}
+      <div className="bg-white p-5 rounded-2xl shadow space-y-4">
+        <h3 className="font-semibold">Profile</h3>
+        <input className="w-full border p-2 rounded" placeholder="Admin Name" />
+        <input className="w-full border p-2 rounded" placeholder="Email" />
+        <input className="w-full border p-2 rounded" placeholder="Phone" />
+      </div>
 
-/* ================= OTHER COMPONENTS ================= */
+      <div className="bg-white p-5 rounded-2xl shadow space-y-4">
+        <h3 className="font-semibold">Controls</h3>
+        <label className="flex justify-between">
+          Auto Approve
+          <input type="checkbox" />
+        </label>
+      </div>
 
-function Card({ title, value }) {
-  return (
-    <div className="bg-white/60 backdrop-blur p-5 rounded-2xl shadow">
-      <p className="text-gray-500 text-sm">{title}</p>
-      <h3 className="text-2xl font-bold mt-1">{value}</h3>
-    </div>
-  );
-}
-
-function Page({ title }) {
-  return (
-    <div className="bg-white p-6 rounded-3xl shadow">
-      <h2 className="text-2xl font-bold">{title}</h2>
+      <button className="bg-blue-600 text-white px-5 py-2 rounded-lg">
+        Save Settings
+      </button>
     </div>
   );
 }
