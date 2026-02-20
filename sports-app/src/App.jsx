@@ -26,7 +26,8 @@ function App() {
           <Route path="/Owner" element= {<Owner/>} />
           <Route path="/AdminDashboard" element={<AdminDashboard/>} />
           <Route path="/Contactus" element={<Contact/>} />
-           <Route path="/adminpanel" element={<Admin/>} />
+          
+          <Route path="/adminpanel" element={<Admin/>} />
           
 
         </Routes>
