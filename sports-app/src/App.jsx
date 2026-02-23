@@ -1,6 +1,7 @@
 import React from "react";
+import { Routes, Route, useLocation } from "react-router-dom";
+
 import AdminDashboard from "./Components/Dashboard/AdminDashboard";
-import { Routes, Route, BrowserRouter, useLocation } from "react-router-dom";
 import Home from "./Components/Home/Home";
 import Academis from "./Components/Academies/Academies";
 import AcademiesDetails from "./Components/AcademiesDetails/AcademiesDetails";
@@ -14,7 +15,6 @@ import Admin from "./Components/adminpannel/Adminpanel";
 function Layout() {
   const location = useLocation();
 
-  // ❗ paths where navbar & footer should be hidden
   const hideLayout = location.pathname === "/adminpanel";
 
   return (
@@ -37,4 +37,4 @@ function Layout() {
   );
 }
 
-export default App;
+export default Layout;
