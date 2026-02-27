@@ -19,7 +19,7 @@ export default function SportsAdminPanel() {
   return (
     <div className="flex min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
 
-      {/* SIDEBAR */}
+      {/* ================= SIDEBAR ================= */}
       <motion.aside
         animate={{ width: open ? 240 : 80 }}
         className="bg-slate-900 text-white flex flex-col"
@@ -41,14 +41,17 @@ export default function SportsAdminPanel() {
         </nav>
       </motion.aside>
 
-      {/* MAIN */}
+      {/* ================= MAIN ================= */}
       <div className="flex-1 flex flex-col">
 
-        {/* TOPBAR */}
+        {/* ================= TOPBAR ================= */}
         <header className="bg-white/80 backdrop-blur shadow px-6 py-3 flex justify-between items-center">
           <div className="flex items-center gap-3 bg-slate-100 px-3 py-2 rounded-lg w-72">
             <Search size={18} />
-            <input className="bg-transparent outline-none w-full text-sm" placeholder="Search..." />
+            <input
+              className="bg-transparent outline-none w-full text-sm"
+              placeholder="Search..."
+            />
           </div>
 
           <div className="flex items-center gap-4">
@@ -57,18 +60,11 @@ export default function SportsAdminPanel() {
           </div>
         </header>
 
-        {/* CONTENT */}
+        {/* ================= CONTENT ================= */}
         <main className="p-6 overflow-y-auto">
-
-          {/* ================= DASHBOARD ================= */}
           {active === "Dashboard" && <DashboardSection />}
-
-          {/* ================= ACADEMIES ================= */}
           {active === "Academies" && <Tablelist />}
-
-          {/* ================= SETTINGS ================= */}
           {active === "Settings" && <SettingsSection />}
-
         </main>
 
       </div>
@@ -92,11 +88,28 @@ function MenuItem({ icon, label, open, active, setActive }) {
 
 /* ================= DASHBOARD SECTION ================= */
 function DashboardSection() {
+  const [requests, setRequests] = useState([
+    { id: 1, name: "Star Cricket Academy", status: "Pending" },
+    { id: 2, name: "Elite Football Academy", status: "Pending" },
+    { id: 3, name: "Ace Badminton Academy", status: "Pending" },
+  ]);
+
+  const handleStatus = (id, newStatus) => {
+    setRequests((prev) =>
+      prev.map((item) =>
+        item.id === id ? { ...item, status: newStatus } : item
+      )
+    );
+  };
+
   return (
     <div className="space-y-8">
 
-      <h2 className="text-2xl font-bold text-gray-700">Admin Dashboard</h2>
+      <h2 className="text-2xl font-bold text-gray-700">
+        Admin Dashboard
+      </h2>
 
+      {/* ================= STATS ================= */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
 
         <div className="bg-blue-100 p-6 rounded-xl shadow">
@@ -106,23 +119,73 @@ function DashboardSection() {
 
         <div className="bg-yellow-100 p-6 rounded-xl shadow">
           <h3 className="font-semibold text-yellow-700">Pending</h3>
-          <p className="text-3xl font-bold mt-2">6</p>
+          <p className="text-3xl font-bold mt-2">
+            {requests.filter(r => r.status === "Pending").length}
+          </p>
         </div>
 
         <div className="bg-red-100 p-6 rounded-xl shadow">
           <h3 className="font-semibold text-red-700">Rejected</h3>
-          <p className="text-3xl font-bold mt-2">3</p>
+          <p className="text-3xl font-bold mt-2">
+            {requests.filter(r => r.status === "Rejected").length}
+          </p>
         </div>
 
       </div>
 
-      <div className="bg-white p-5 rounded-xl shadow">
-        <h3 className="font-semibold mb-3">Recent Activity</h3>
-        <ul className="text-sm text-gray-600 space-y-2">
-          <li>✔ Star Cricket Academy approved</li>
-          <li>⏳ Elite Football pending</li>
-          <li>❌ Ace Badminton rejected</li>
-        </ul>
+      {/* ================= TABLE ================= */}
+      <div className="bg-white p-6 rounded-xl shadow">
+        <h3 className="font-semibold mb-4">Academy Requests</h3>
+
+        <table className="w-full text-sm border-collapse">
+          <thead>
+            <tr className="border-b bg-gray-100 text-gray-700">
+              <th className="text-left py-3 px-2">Academy Name</th>
+              <th className="text-center py-3 px-2">Status</th>
+              <th className="text-center py-3 px-2">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {requests.map((item) => (
+              <tr key={item.id} className="border-b hover:bg-gray-50">
+
+                <td className="py-3 px-2">{item.name}</td>
+
+                <td className={`py-3 px-2 text-center font-medium ${
+                  item.status === "Approved"
+                    ? "text-green-600"
+                    : item.status === "Rejected"
+                    ? "text-red-600"
+                    : "text-yellow-600"
+                }`}>
+                  {item.status}
+                </td>
+
+                <td className="py-3 px-2 text-center">
+                  {item.status === "Pending" && (
+                    <div className="flex justify-center gap-3">
+                      <button
+                        onClick={() => handleStatus(item.id, "Approved")}
+                        className="bg-green-500 hover:bg-green-600 text-white px-4 py-1 rounded-md text-xs font-medium transition"
+                      >
+                        Active
+                      </button>
+
+                      <button
+                        onClick={() => handleStatus(item.id, "Rejected")}
+                        className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded-md text-xs font-medium transition"
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
+                </td>
+
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
 
     </div>
@@ -141,14 +204,6 @@ function SettingsSection() {
         <input className="w-full border p-2 rounded" placeholder="Admin Name" />
         <input className="w-full border p-2 rounded" placeholder="Email" />
         <input className="w-full border p-2 rounded" placeholder="Phone" />
-      </div>
-
-      <div className="bg-white p-5 rounded-2xl shadow space-y-4">
-        <h3 className="font-semibold">Controls</h3>
-        <label className="flex justify-between">
-          Auto Approve
-          <input type="checkbox" />
-        </label>
       </div>
 
       <button className="bg-blue-600 text-white px-5 py-2 rounded-lg">
