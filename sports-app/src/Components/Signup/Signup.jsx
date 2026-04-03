@@ -1,8 +1,11 @@
 import { useState } from "react";
+import API from "../../api/axios";
 
 const Signup = ({ isOpen, onClose }) => {
   const [form, setForm] = useState({
     academyName: "",
+    name: "",          // ✅ added
+    password: "",      // ✅ added
     city: "",
     area: "",
     sport: [],
@@ -16,30 +19,19 @@ const Signup = ({ isOpen, onClose }) => {
   if (!isOpen) return null;
 
   const sportsList = [
-    "Cricket",
-    "Football",
-    "Badminton",
-    "Tennis",
-    "Basketball",
-    "Swimming",
-    "Table Tennis",
-    "Volleyball"
+    "Cricket","Football","Badminton","Tennis",
+    "Basketball","Swimming","Table Tennis","Volleyball"
   ];
 
   const facilitiesList = [
-    "Parking",
-    "Drinking Water",
-    "Changing Room",
-    "Washroom",
-    "Flood Lights",
-    "Seating Area"
+    "Parking","Drinking Water","Changing Room",
+    "Washroom","Seating Area"
   ];
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ✅ MULTIPLE SPORTS SELECT
   const handleSportChange = (sport) => {
     if (form.sport.includes(sport)) {
       setForm({
@@ -68,10 +60,33 @@ const Signup = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Academy Registered Successfully 🎉");
-    console.log(form);
+
+    try {
+      const res = await API.post("academies/register", {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        academyName: form.academyName,
+        city: form.city,
+        area: form.area,
+        sport: form.sport,
+        phone: form.phone,
+        description: form.description,
+        image: form.image,
+        facilities: form.facilities,
+      });
+
+      if (res.data.success) {
+        alert("Academy Registered Successfully 🎉");
+        onClose();
+      }
+
+    } catch (error) {
+      console.log(error.response?.data);
+      alert(error.response?.data?.message || "Error");
+    }
   };
 
   return (
@@ -90,6 +105,7 @@ const Signup = ({ isOpen, onClose }) => {
         <h2 className="text-3xl font-bold text-center mb-1 text-gray-800">
           Academy Signup
         </h2>
+
         <p className="text-center text-gray-500 mb-6 text-sm">
           Register your academy to get students
         </p>
@@ -108,7 +124,32 @@ const Signup = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* City (RADIO BUTTON) + Area */}
+          {/* ✅ Owner Name */}
+          <div>
+            <label className="text-sm text-gray-600">Owner Name</label>
+            <input
+              name="name"
+              placeholder="Enter your name"
+              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* ✅ Password */}
+          <div>
+            <label className="text-sm text-gray-600">Password</label>
+            <input
+              type="password"
+              name="password"
+              placeholder="Enter password"
+              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          {/* City + Area */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="text-sm text-gray-600">City</label>
@@ -140,7 +181,7 @@ const Signup = ({ isOpen, onClose }) => {
             </div>
           </div>
 
-          {/* SPORT (CHECKBOX MULTI SELECT) */}
+          {/* Sports */}
           <div>
             <label className="text-sm text-gray-600">Sport Type</label>
             <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
@@ -195,7 +236,7 @@ const Signup = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* Image URL */}
+          {/* Image */}
           <div>
             <label className="text-sm text-gray-600">Academy Image URL</label>
             <input

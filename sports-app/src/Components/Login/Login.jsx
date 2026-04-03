@@ -1,24 +1,40 @@
 import { useState } from "react";
+import API from "../../api/axios";
 
 const Login = ({ isOpen, onClose }) => {
-  const [role, setRole] = useState(""); // Dropdown initially blank
-  const [email, setEmail] = useState(""); // Email input
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Role: ${role}\nEmail: ${email}`);
+
+    try {
+      const res = await API.post("/auth/login", { email, password });
+
+      if (res.data.success) {
+        alert("Login Successful ✅");
+
+        localStorage.setItem("user", JSON.stringify(res.data.user));
+        localStorage.setItem("academy", JSON.stringify(res.data.academy));
+
+        // 🔥 IMPORTANT (navbar ko update karne ke liye)
+        window.dispatchEvent(new Event("loginSuccess"));
+
+        onClose();
+      } else {
+        alert(res.data.message || "Login failed ❌");
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error.response?.data?.message || "Server error ❌");
+    }
   };
 
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 backdrop-blur-sm bg-black/20">
-
-      {/* Modal Box */}
       <div className="relative w-[380px] p-8 rounded-3xl shadow-2xl bg-white/90 backdrop-blur-md border border-white/40 animate-scaleIn">
-
-        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-4 right-5 text-gray-500 hover:text-black text-xl cursor-pointer transition"
@@ -34,8 +50,6 @@ const Login = ({ isOpen, onClose }) => {
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-5">
-
-          {/* Email Input */}
           <div>
             <label className="text-sm text-gray-600">Email</label>
             <input
@@ -48,7 +62,6 @@ const Login = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* Password Input */}
           <div>
             <label className="text-sm text-gray-600">Password</label>
             <input
@@ -61,14 +74,12 @@ const Login = ({ isOpen, onClose }) => {
             />
           </div>
 
-          {/* Login Button */}
           <button
             type="submit"
             className="w-full py-3 rounded-full font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 transition duration-300 cursor-pointer shadow-lg"
           >
             Login
           </button>
-
         </form>
       </div>
     </div>

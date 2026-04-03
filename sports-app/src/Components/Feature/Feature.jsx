@@ -44,10 +44,10 @@ function Feature() {
               <p className="text-sm text-gray-600">
                 ⭐ {academy.rating} Rating
               </p>
-
-              <p className="text-xs text-gray-500">
-                {academy.city}
+               <p className="text-xs text-gray-500">
+                 {academy.area} , {academy.city}
               </p>
+             
             </div>
           </div>
         ))}

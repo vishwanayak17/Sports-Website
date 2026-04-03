@@ -1,5 +1,5 @@
 import React from "react";
-import AdminDashboard from "./Components/Dashboard/AdminDashboard";
+
 import { Routes, Route, BrowserRouter, useLocation } from "react-router-dom";
 import Home from "./Components/Home/Home";
 import Academis from "./Components/Academies/Academies";
@@ -10,6 +10,7 @@ import Navbar from "./Components/Navbar/Navbar";
 import Footer from "./Components/footer/footer";
 import Contact from "./Components/contact/contact";
 import Admin from "./Components/adminpannel/Adminpanel";
+//import AdminDashboard from "./Components/Dashboard/AdminDashboard";
 
 function Layout() {
   const location = useLocation();
@@ -27,7 +28,7 @@ function Layout() {
         <Route path="/academy/:id" element={<AcademiesDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/Owner" element={<Owner />} />
-        <Route path="/AdminDashboard" element={<AdminDashboard />} />
+        {/* <Route path="/AdminDashboard" element={<AdminDashboard />} /> ❌ */}
         <Route path="/Contactus" element={<Contact />} />
         <Route path="/adminpanel" element={<Admin />} />
       </Routes>
