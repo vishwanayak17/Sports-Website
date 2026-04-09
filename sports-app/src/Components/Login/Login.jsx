@@ -1,9 +1,11 @@
 import { useState } from "react";
 import API from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   if (!isOpen) return null;
 
@@ -11,24 +13,46 @@ const Login = ({ isOpen, onClose }) => {
     e.preventDefault();
 
     try {
-      const res = await API.post("/auth/login", { email, password });
+      // ✅ Pehle admin check karo
+      const adminRes = await API.post("/admin/login", { email, password });
 
-      if (res.data.success) {
-        alert("Login Successful ✅");
-
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        localStorage.setItem("academy", JSON.stringify(res.data.academy));
-
-        // 🔥 IMPORTANT (navbar ko update karne ke liye)
+      if (adminRes.data.success) {
+        alert("Admin Login Successful ✅");
+        localStorage.setItem("admin", JSON.stringify({ email }));
         window.dispatchEvent(new Event("loginSuccess"));
-
         onClose();
-      } else {
-        alert(res.data.message || "Login failed ❌");
+        navigate("/adminpanel");
+        return;
       }
-    } catch (error) {
-      console.log(error);
-      alert(error.response?.data?.message || "Server error ❌");
+
+    } catch (adminError) {
+
+      // ✅ Admin nahi hai, academy try karo
+      try {
+        const res = await API.post("/auth/login", { email, password });
+
+        if (res.data.success) {
+          alert("Login Successful ✅");
+
+          if (res.data.academy) {
+            localStorage.setItem("academy", JSON.stringify(res.data.academy));
+          }
+
+          if (res.data.user) {
+            localStorage.setItem("user", JSON.stringify(res.data.user));
+          }
+
+          window.dispatchEvent(new Event("loginSuccess"));
+          onClose();
+
+          if (res.data.academy) {
+            navigate("/academy-dashboard");
+          }
+        }
+
+      } catch (userError) {
+        alert(userError.response?.data?.message || "Invalid email or password ❌");
+      }
     }
   };
 

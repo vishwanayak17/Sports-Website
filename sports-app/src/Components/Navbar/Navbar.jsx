@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/sportimg.png";
 import Login from "../Login/Login";
 import Signup from "../Signup/Signup";
+import API from "../../api/axios";
 
 function Navbar() {
   const [open, setOpen] = useState(false);
@@ -43,6 +44,38 @@ function Navbar() {
     setShowProfile(false);
   };
 
+  // ✅ Change Password Function
+  const handleChangePassword = async () => {
+    if (!passwords.current || !passwords.newPass || !passwords.confirm) {
+      alert("Please fill all fileds ❌");
+      return;
+    }
+
+    if (passwords.newPass !== passwords.confirm) {
+      alert("Don't match new password or confirm password ❌");
+      return;
+    }
+
+    try {
+      const res = await API.post("/auth/change-password", {
+        email: academy.email,
+        currentPassword: passwords.current,
+        newPassword: passwords.newPass,
+        confirmPassword: passwords.confirm
+      });
+
+      if (res.data.success) {
+        alert("Password Updated! 🎉");
+        setPasswords({ current: "", newPass: "", confirm: "" });
+        setShowChangePassword(false);
+      } else {
+        alert(res.data.message || "Kuch galat hua ❌");
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Server error ❌");
+    }
+  };
+
   return (
     <>
       <nav className="bg-white fixed w-full top-0 z-50 shadow-sm">
@@ -69,7 +102,6 @@ function Navbar() {
                     onClick={() => setShowProfile(!showProfile)}
                     className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gray-200 hover:shadow-md transition"
                   >
-                    {/* Profile Icon */}
                     <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-blue-600 text-white flex items-center justify-center rounded-full text-sm font-bold">
                       {academy?.name?.charAt(0).toUpperCase()}
                     </div>
@@ -80,6 +112,7 @@ function Navbar() {
                   {/* Dropdown */}
                   {showProfile && (
                     <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden z-50">
+
                       {/* Header */}
                       <div className="bg-gradient-to-r from-cyan-400 to-blue-600 p-4 flex items-center gap-3">
                         <div className="w-12 h-12 bg-white text-blue-600 flex items-center justify-center rounded-full text-xl font-bold">
@@ -113,7 +146,7 @@ function Navbar() {
                           onClick={() => setShowChangePassword(!showChangePassword)}
                           className="w-full py-2 rounded-xl text-sm font-medium text-white bg-gradient-to-r from-cyan-400 to-blue-600 hover:opacity-90 transition"
                         >
-                          {showChangePassword ? "Hide" : "🔑 Change Password"}
+                          {showChangePassword ? "Hide ▲" : "🔑 Change Password ▼"}
                         </button>
 
                         {showChangePassword && (
@@ -140,10 +173,10 @@ function Navbar() {
                               onChange={(e) => setPasswords({ ...passwords, confirm: e.target.value })}
                             />
                             <button
-                              onClick={() => alert("Change password API yahan lagao! 🔧")}
+                              onClick={handleChangePassword}
                               className="w-full py-2 rounded-xl text-sm font-medium text-white bg-green-500 hover:bg-green-600 transition"
                             >
-                              Update Password
+                              Update Password ✅
                             </button>
                           </div>
                         )}
@@ -158,6 +191,7 @@ function Navbar() {
                           🚪 Logout
                         </button>
                       </div>
+
                     </div>
                   )}
                 </div>

@@ -11,6 +11,7 @@ import Footer from "./Components/footer/footer";
 import Contact from "./Components/contact/contact";
 import Admin from "./Components/adminpannel/Adminpanel";
 //import AdminDashboard from "./Components/Dashboard/AdminDashboard";
+import AcademyDashboard from "./Components/AcademyDashboard/AcademyDashboard";
 
 function Layout() {
   const location = useLocation();
@@ -31,6 +32,7 @@ function Layout() {
         {/* <Route path="/AdminDashboard" element={<AdminDashboard />} /> ❌ */}
         <Route path="/Contactus" element={<Contact />} />
         <Route path="/adminpanel" element={<Admin />} />
+        <Route path="/academy-dashboard" element={<AcademyDashboard/>} />
       </Routes>
 
       {!hideLayout && <Footer />}

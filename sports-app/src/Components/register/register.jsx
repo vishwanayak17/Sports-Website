@@ -1,43 +1,81 @@
-import React, { useState } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useState } from "react";
+import API from "../../api/axios";
 
-const AcademyRegistrationSection = () => {
-  const [formData, setFormData] = useState({
+const Register = () => {
+  const [form, setForm] = useState({
     academyName: "",
+    name: "",
+    password: "",
     city: "",
     area: "",
-    sports: "",
+    sport: [],
     phone: "",
     email: "",
     description: "",
-    imageUrl: "",
+    image: "",
     facilities: [],
   });
 
+  const [loading, setLoading] = useState(false);
+
+  const sportsList = [
+    "Cricket", "Football", "Badminton", "Tennis",
+    "Basketball", "Swimming", "Table Tennis", "Volleyball"
+  ];
+
+  const facilitiesList = [
+    "Parking", "Drinking Water", "Changing Room",
+    "Washroom", "Flood Lights", "Cafeteria", "Seating Area"
+  ];
+
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleFacilityChange = (e) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setFormData({
-        ...formData,
-        facilities: [...formData.facilities, value],
-      });
+  const handleSportChange = (sport) => {
+    if (form.sport.includes(sport)) {
+      setForm({ ...form, sport: form.sport.filter((s) => s !== sport) });
     } else {
-      setFormData({
-        ...formData,
-        facilities: formData.facilities.filter((item) => item !== value),
-      });
+      setForm({ ...form, sport: [...form.sport, sport] });
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleFacilityChange = (facility) => {
+    if (form.facilities.includes(facility)) {
+      setForm({ ...form, facilities: form.facilities.filter((f) => f !== facility) });
+    } else {
+      setForm({ ...form, facilities: [...form.facilities, facility] });
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
-    alert("Academy Registration Submitted Successfully!");
+    setLoading(true);
+
+    try {
+      const res = await API.post("academies/register", {
+        name: form.name,
+        email: form.email,
+        password: form.password,
+        academyName: form.academyName,
+        city: form.city,
+        area: form.area,
+        sport: form.sport,
+        phone: form.phone,
+        description: form.description,
+        image: form.image,
+        facilities: form.facilities,
+      });
+
+      if (res.data.success) {
+        alert("Academy Registered Successfully! 🎉");
+      }
+
+    } catch (error) {
+      alert(error.response?.data?.message || "Something went wrong!");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -53,7 +91,6 @@ const AcademyRegistrationSection = () => {
             Connect your academy with players across Ahmedabad & Gandhinagar.
             Grow your academy digitally.
           </p>
-
           <ul className="space-y-3 text-lg">
             <li>✅ Verified Listing</li>
             <li>✅ Increase Admissions</li>
@@ -71,113 +108,149 @@ const AcademyRegistrationSection = () => {
           <form onSubmit={handleSubmit} className="space-y-5">
 
             {/* Academy Name */}
-            <input
-              type="text"
-              name="academyName"
-              placeholder="Academy Name"
-              required
-              onChange={handleChange}
-              className="input-style"
-            />
+            <div>
+              <label className="text-sm text-gray-600">Academy Name</label>
+              <input
+                name="academyName"
+                placeholder="Enter academy name"
+                className="input-style"
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Owner Name */}
+            <div>
+              <label className="text-sm text-gray-600">Owner Name</label>
+              <input
+                name="name"
+                placeholder="Enter your name"
+                className="input-style"
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="text-sm text-gray-600">Password</label>
+              <input
+                type="password"
+                name="password"
+                placeholder="Create password"
+                className="input-style"
+                onChange={handleChange}
+                required
+              />
+            </div>
 
             {/* City & Area */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <select
-                name="city"
-                required
-                onChange={handleChange}
-                className="input-style"
-              >
-                <option value="">Select City</option>
-                <option>Ahmedabad</option>
-                <option>Gandhinagar</option>
-              </select>
+              <div>
+                <label className="text-sm text-gray-600">City</label>
+                <div className="mt-2 flex flex-col gap-1 text-sm">
+                  {["Ahmedabad", "Gandhinagar"].map((city) => (
+                    <label key={city} className="flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="city"
+                        value={city}
+                        onChange={handleChange}
+                        required
+                      />
+                      {city}
+                    </label>
+                  ))}
+                </div>
+              </div>
 
-              <input
-                type="text"
-                name="area"
-                placeholder="Area / Location"
-                required
-                onChange={handleChange}
-                className="input-style"
-              />
+              <div>
+                <label className="text-sm text-gray-600">Area / Location</label>
+                <input
+                  name="area"
+                  placeholder="Enter area"
+                  className="input-style"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
             {/* Sports */}
-            <select
-              name="sports"
-              required
-              onChange={handleChange}
-              className="input-style"
-            >
-              <option value="">Select Sport Type</option>
-              <option>Cricket</option>
-              <option>Football</option>
-              <option>Badminton</option>
-              <option>Basketball</option>
-              <option>Multi Sports</option>
-            </select>
+            <div>
+              <label className="text-sm text-gray-600">Sport Type</label>
+              <div className="grid grid-cols-2 gap-2 mt-2 text-sm">
+                {sportsList.map((sport) => (
+                  <label key={sport} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      onChange={() => handleSportChange(sport)}
+                    />
+                    {sport}
+                  </label>
+                ))}
+              </div>
+            </div>
 
             {/* Phone & Email */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone Number"
-                required
-                onChange={handleChange}
-                className="input-style"
-              />
-
-              <input
-                type="email"
-                name="email"
-                placeholder="Email Address"
-                required
-                onChange={handleChange}
-                className="input-style"
-              />
+              <div>
+                <label className="text-sm text-gray-600">Phone</label>
+                <input
+                  type="tel"
+                  name="phone"
+                  placeholder="Phone number"
+                  className="input-style"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div>
+                <label className="text-sm text-gray-600">Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email address"
+                  className="input-style"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
             {/* Description */}
-            <textarea
-              name="description"
-              rows="4"
-              placeholder="Academy Description..."
-              required
-              onChange={handleChange}
-              className="input-style resize-none"
-            ></textarea>
+            <div>
+              <label className="text-sm text-gray-600">Academy Description</label>
+              <textarea
+                name="description"
+                rows="3"
+                placeholder="Write short description"
+                className="input-style resize-none"
+                onChange={handleChange}
+              />
+            </div>
 
             {/* Image URL */}
-            <input
-              type="url"
-              name="imageUrl"
-              placeholder="Academy Image URL"
-              required
-              onChange={handleChange}
-              className="input-style"
-            />
+            <div>
+              <label className="text-sm text-gray-600">Academy Image URL</label>
+              <input
+                name="image"
+                placeholder="Paste image link"
+                className="input-style"
+                onChange={handleChange}
+              />
+            </div>
 
             {/* Facilities */}
             <div>
-              <label className="block mb-2 font-semibold text-gray-700">
-                Facilities:
-              </label>
-              <div className="grid grid-cols-2 gap-3 text-gray-600">
-                {[
-                  "Parking",
-                  "Changing Room",
-                  "Flood Lights",
-                  "Washroom",
-                  "Drinking Water",
-                  "Cafeteria",
-                ].map((facility) => (
-                  <label key={facility} className="flex items-center space-x-2">
+              <label className="text-sm text-gray-600 font-semibold">Facilities</label>
+              <div className="grid grid-cols-2 gap-3 mt-2 text-gray-600">
+                {facilitiesList.map((facility) => (
+                  <label key={facility} className="flex items-center space-x-2 text-sm">
                     <input
                       type="checkbox"
                       value={facility}
-                      onChange={handleFacilityChange}
+                      onChange={() => handleFacilityChange(facility)}
                       className="accent-blue-600"
                     />
                     <span>{facility}</span>
@@ -186,41 +259,36 @@ const AcademyRegistrationSection = () => {
               </div>
             </div>
 
-            {/* CAPTCHA */}
-            <div className="flex justify-center pt-4">
-              <ReCAPTCHA sitekey="YOUR_SITE_KEY" />
-            </div>
-
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg py-4 rounded-xl transition duration-300"
+              disabled={loading}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg py-4 rounded-xl transition duration-300 disabled:opacity-60"
             >
-              Register Academy 🚀
+              {loading ? "Registering..." : "Register Academy 🚀"}
             </button>
+
           </form>
         </div>
       </div>
 
-      {/* Tailwind Common Input Style */}
-      <style>
-        {`
-          .input-style {
-            width: 100%;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            padding: 14px 18px;
-            font-size: 16px;
-            outline: none;
-          }
-          .input-style:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-          }
-        `}
-      </style>
+      <style>{`
+        .input-style {
+          width: 100%;
+          border: 1px solid #d1d5db;
+          border-radius: 12px;
+          padding: 14px 18px;
+          font-size: 16px;
+          outline: none;
+          margin-top: 4px;
+        }
+        .input-style:focus {
+          border-color: #2563eb;
+          box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+        }
+      `}</style>
     </section>
   );
 };
 
-export default AcademyRegistrationSection;
+export default Register;

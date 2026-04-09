@@ -4,11 +4,11 @@ import API from "../../api/axios";
 const Signup = ({ isOpen, onClose }) => {
   const [form, setForm] = useState({
     academyName: "",
-    name: "",          // ✅ added
-    password: "",      // ✅ added
+    name: "",
+    password: "",
     city: "",
     area: "",
-    sport: [],
+    sports: [],   // ✅ fixed
     phone: "",
     email: "",
     description: "",
@@ -20,7 +20,7 @@ const Signup = ({ isOpen, onClose }) => {
 
   const sportsList = [
     "Cricket","Football","Badminton","Tennis",
-    "Basketball","Swimming","Table Tennis","Volleyball"
+    "Basketball","Swimming","Table Tennis","Volleyball","Martial Arts","Skating"
   ];
 
   const facilitiesList = [
@@ -33,15 +33,15 @@ const Signup = ({ isOpen, onClose }) => {
   };
 
   const handleSportChange = (sport) => {
-    if (form.sport.includes(sport)) {
+    if (form.sports.includes(sport)) {
       setForm({
         ...form,
-        sport: form.sport.filter((s) => s !== sport),
+        sports: form.sports.filter((s) => s !== sport),
       });
     } else {
       setForm({
         ...form,
-        sport: [...form.sport, sport],
+        sports: [...form.sports, sport],
       });
     }
   };
@@ -63,6 +63,12 @@ const Signup = ({ isOpen, onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // ✅ validation
+    if (form.sports.length === 0) {
+      alert("Please select at least one sport");
+      return;
+    }
+
     try {
       const res = await API.post("academies/register", {
         name: form.name,
@@ -71,15 +77,19 @@ const Signup = ({ isOpen, onClose }) => {
         academyName: form.academyName,
         city: form.city,
         area: form.area,
-        sport: form.sport,
+        sports: form.sports, // ✅ fixed
         phone: form.phone,
         description: form.description,
-        image: form.image,
+        image: form.image || "https://via.placeholder.com/300", // ✅ default image
         facilities: form.facilities,
       });
 
       if (res.data.success) {
         alert("Academy Registered Successfully 🎉");
+
+        // ✅ save to localStorage (auto dashboard login feel)
+        localStorage.setItem("academy", JSON.stringify(res.data.data));
+
         onClose();
       }
 
@@ -92,7 +102,7 @@ const Signup = ({ isOpen, onClose }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center z-50 backdrop-blur-sm bg-black/20">
 
-      <div className="relative w-[90%] max-w-[520px] max-h-[90vh] overflow-y-auto p-8 rounded-3xl shadow-2xl bg-white/90 backdrop-blur-md border border-white/40 animate-scaleIn">
+      <div className="relative w-[90%] max-w-[520px] max-h-[90vh] overflow-y-auto p-8 rounded-3xl shadow-2xl bg-white/90 backdrop-blur-md border border-white/40">
 
         {/* Close Button */}
         <button
@@ -118,32 +128,32 @@ const Signup = ({ isOpen, onClose }) => {
             <input
               name="academyName"
               placeholder="Enter academy name"
-              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              className="w-full mt-1 border border-gray-300 p-3 rounded-xl"
               onChange={handleChange}
               required
             />
           </div>
 
-          {/* ✅ Owner Name */}
+          {/* Owner Name */}
           <div>
             <label className="text-sm text-gray-600">Owner Name</label>
             <input
               name="name"
               placeholder="Enter your name"
-              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              className="w-full mt-1 border border-gray-300 p-3 rounded-xl"
               onChange={handleChange}
               required
             />
           </div>
 
-          {/* ✅ Password */}
+          {/* Password */}
           <div>
             <label className="text-sm text-gray-600">Password</label>
             <input
               type="password"
               name="password"
               placeholder="Enter password"
-              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              className="w-full mt-1 border border-gray-300 p-3 rounded-xl"
               onChange={handleChange}
               required
             />
@@ -170,11 +180,11 @@ const Signup = ({ isOpen, onClose }) => {
             </div>
 
             <div>
-              <label className="text-sm text-gray-600">Area / Location</label>
+              <label className="text-sm text-gray-600">Area</label>
               <input
                 name="area"
                 placeholder="Enter area"
-                className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
+                className="w-full mt-1 border border-gray-300 p-3 rounded-xl"
                 onChange={handleChange}
                 required
               />
@@ -189,6 +199,7 @@ const Signup = ({ isOpen, onClose }) => {
                 <label key={i} className="flex items-center gap-2">
                   <input
                     type="checkbox"
+                    checked={form.sports.includes(sport)} // ✅ fix
                     onChange={() => handleSportChange(sport)}
                   />
                   {sport}
@@ -199,53 +210,39 @@ const Signup = ({ isOpen, onClose }) => {
 
           {/* Phone + Email */}
           <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm text-gray-600">Phone</label>
-              <input
-                type="tel"
-                name="phone"
-                placeholder="Phone number"
-                className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                onChange={handleChange}
-                required
-              />
-            </div>
-
-            <div>
-              <label className="text-sm text-gray-600">Email</label>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email address"
-                className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                onChange={handleChange}
-                required
-              />
-            </div>
+            <input
+              type="tel"
+              name="phone"
+              placeholder="Phone number"
+              className="border p-3 rounded-xl"
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              className="border p-3 rounded-xl"
+              onChange={handleChange}
+              required
+            />
           </div>
 
           {/* Description */}
-          <div>
-            <label className="text-sm text-gray-600">Academy Description</label>
-            <textarea
-              name="description"
-              rows="2"
-              placeholder="Write short description"
-              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              onChange={handleChange}
-            />
-          </div>
+          <textarea
+            name="description"
+            placeholder="Description"
+            className="w-full border p-3 rounded-xl"
+            onChange={handleChange}
+          />
 
           {/* Image */}
-          <div>
-            <label className="text-sm text-gray-600">Academy Image URL</label>
-            <input
-              name="image"
-              placeholder="Paste image link"
-              className="w-full mt-1 border border-gray-300 p-3 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
-              onChange={handleChange}
-            />
-          </div>
+          <input
+            name="image"
+            placeholder="Image URL"
+            className="w-full border p-3 rounded-xl"
+            onChange={handleChange}
+          />
 
           {/* Facilities */}
           <div>
@@ -266,9 +263,9 @@ const Signup = ({ isOpen, onClose }) => {
           {/* Submit */}
           <button
             type="submit"
-            className="w-full py-3 mt-2 rounded-full font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600 hover:scale-105 transition duration-300 shadow-lg"
+            className="w-full py-3 rounded-full font-semibold text-white bg-gradient-to-r from-cyan-500 to-blue-600"
           >
-            Register Academy
+            Register Academy 🚀
           </button>
 
         </form>
