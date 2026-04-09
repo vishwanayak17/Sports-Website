@@ -1,20 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import heroBg from "../../assets/hero-bg.png";
+import axios from "axios";
 
 function Herosection() {
   const navigate = useNavigate();
 
+  const [sportsList, setSportsList] = useState([]);
+  const [locationsList, setLocationsList] = useState([]);
   const [sport, setSport] = useState("");
   const [location, setLocation] = useState("");
+
+  useEffect(() => {
+    // ✅ Fetch Sports
+    const fetchSports = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/sports");
+        setSportsList(Array.isArray(res.data) ? res.data : res.data.data);
+      } catch (error) {
+        console.log("Sports fetch error:", error);
+      }
+    };
+
+    // ✅ Fetch Locations
+    const fetchLocations = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/locations");
+        setLocationsList(Array.isArray(res.data) ? res.data : res.data.data);
+      } catch (error) {
+        console.log("Locations fetch error:", error);
+      }
+    };
+
+    fetchSports();
+    fetchLocations();
+  }, []);
 
   const handleSearch = () => {
     if (!sport || !location) {
       alert("Please select sport and location");
       return;
     }
-
-    navigate(`/academis?sport=${sport}&city=${location}`);
+    navigate(`/academies?sport=${sport}&city=${location}`);
   };
 
   return (
@@ -54,12 +81,7 @@ function Herosection() {
 
             {/* Sport Dropdown */}
             <div className="relative w-full md:w-[200px]">
-              
-              {/* Left Icon */}
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
-                🏅
-              </span>
-
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10">🏅</span>
               <select
                 value={sport}
                 onChange={(e) => setSport(e.target.value)}
@@ -79,27 +101,17 @@ function Herosection() {
                 "
               >
                 <option value="">Choose Sport</option>
-                <option value="Cricket">Cricket</option>
-                <option value="Football">Football</option>
-                <option value="Badminton">Badminton</option>
-                <option value="Swimming">Swimming</option>
-                <option value="Hockey">Hockey</option>
-                <option value="Tennis"> Tennis</option>
-                <option value="Skating">Skating</option>
-                <option value="Basketball">Basket Ball</option>
-                <option value="Volleyball">Volley Ball</option>
-                <option value="Martial Arts">Martial Arts</option>
+                {sportsList.map((s) => (
+                  <option key={s.id} value={s.name}>
+                    {s.name}
+                  </option>
+                ))}
               </select>
             </div>
 
             {/* Location Dropdown */}
             <div className="relative w-full md:w-[210px]">
-
-              {/* Left Icon */}
-              <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10">
-                📍
-              </span>
-
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 z-10">📍</span>
               <select
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
@@ -119,8 +131,11 @@ function Herosection() {
                 "
               >
                 <option value="">Choose Location</option>
-                <option value="Ahmedabad">Ahmedabad</option>
-                <option value="Gandhinagar">Gandhinagar</option>
+                {locationsList.map((l) => (
+                  <option key={l.id} value={l.name}>
+                    {l.name}
+                  </option>
+                ))}
               </select>
             </div>
 

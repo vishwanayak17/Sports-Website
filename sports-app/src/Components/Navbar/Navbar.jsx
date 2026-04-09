@@ -33,7 +33,7 @@ function Navbar() {
                 Home
               </Link>
 
-              <Link className="text-black hover:text-cyan-600 transition" to="/academis">
+              <Link className="text-black hover:text-cyan-600 transition" to="/academies">
                 Academies
               </Link>
 
@@ -76,7 +76,7 @@ function Navbar() {
               <Link className="block text-black" to="/">
                 Home
               </Link>
-              <Link className="block text-black" to="/academis">
+              <Link className="block text-black" to="/academies">
                 Academies
               </Link>
               <a className="block text-black" href="/about">

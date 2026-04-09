@@ -1,29 +1,24 @@
-import React from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
-import AdminDashboard from "./Components/Dashboard/AdminDashboard";
 import Home from "./Components/Home/Home";
-import Academis from "./Components/Academies/Academies";
+import Academies from "./Components/Academies/Academies";
 import AcademiesDetails from "./Components/AcademiesDetails/AcademiesDetails";
 import About from "./Components/Aboutus/Aboutus";
 import Owner from "./Components/Dashboard/OwnerDashboard";
-import Navbar from "./Components/Navbar/Navbar";
-import Footer from "./Components/footer/footer";
+import AdminDashboard from "./Components/Dashboard/AdminDashboard";
 import Contact from "./Components/contact/contact";
 import Admin from "./Components/adminpannel/Adminpanel";
+import Navbar from "./Components/Navbar/Navbar";
+import Footer from "./Components/footer/footer";
 
-function Layout() {
-  const location = useLocation();
-
-  const hideLayout = location.pathname === "/adminpanel";
-
+function App() {
   return (
     <>
-      {!hideLayout && <Navbar />}
+      <Navbar />
 
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/academis" element={<Academis />} />
+        <Route path="/academies" element={<Academies />} />
         <Route path="/academy/:id" element={<AcademiesDetails />} />
         <Route path="/about" element={<About />} />
         <Route path="/Owner" element={<Owner />} />
@@ -32,9 +27,9 @@ function Layout() {
         <Route path="/adminpanel" element={<Admin />} />
       </Routes>
 
-      {!hideLayout && <Footer />}
+      <Footer />
     </>
   );
 }
 
-export default Layout;
+export default App;

@@ -52,7 +52,7 @@ const AboutSportsAcademy = () => {
   }, []);
 
   return (
-    <div className="bg-gray-100 min-h-screen py-16 px-4 mt-16">
+    <div className="bg-white-100 min-h-screen py-16 px-4 mt-16">
 
       {/* PAGE TITLE */}
       <div className="text-center mb-12">
@@ -92,7 +92,7 @@ const AboutSportsAcademy = () => {
             </p>
 
           <button
-  onClick={() => navigate("/academis")}
+  onClick={() => navigate("/academies")}
   className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition"
 >
   Join Our Academy

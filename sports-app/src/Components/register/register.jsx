@@ -41,7 +41,7 @@ const AcademyRegistrationSection = () => {
   };
 
   return (
-    <section className="py-16 px-4 bg-gray-100">
+    <section className="py-16 px-4 bg-white-100">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 rounded-3xl overflow-hidden shadow-2xl">
 
         {/* LEFT SIDE */}

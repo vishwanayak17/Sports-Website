@@ -1,30 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const games = [
-  { name: "Cricket", icon: "🏏", color: "from-green-400 to-emerald-600" },
-  { name: "Football", icon: "⚽", color: "from-yellow-400 to-orange-500" },
-  { name: "Badminton", icon: "🏸", color: "from-purple-400 to-pink-500" },
-  { name: "Tennis", icon: "🎾", color: "from-lime-400 to-green-500" },
-  { name: "Basketball", icon: "🏀", color: "from-orange-400 to-red-500" },
-  { name: "Swimming", icon: "🏊‍♂️", color: "from-cyan-400 to-blue-500" },
-  { name: "Hockey", icon: "🏑", color: "from-indigo-400 to-blue-600" },
-  { name: "Volleyball", icon: "🏐", color: "from-rose-400 to-pink-600" },
-  { name: "Table Tennis", icon: "🏓", color: "from-teal-400 to-cyan-600" },
-  { name: "Skating", icon: "⛸️", color: "from-sky-400 to-indigo-500" },
-  { name: "Martial Arts", icon: "🥋", color: "from-gray-700 to-gray-900" },
-];
+const sportConfig = {
+  Cricket:      { icon: "🏏", color: "from-green-400 to-emerald-600" },
+  Football:     { icon: "⚽", color: "from-yellow-400 to-orange-500" },
+  Badminton:    { icon: "🏸", color: "from-purple-400 to-pink-500" },
+  Tennis:       { icon: "🎾", color: "from-lime-400 to-green-500" },
+  Basketball:   { icon: "🏀", color: "from-orange-400 to-red-500" },
+  Swimming:     { icon: "🏊‍♂️", color: "from-cyan-400 to-blue-500" },
+  Hockey:       { icon: "🏑", color: "from-indigo-400 to-blue-600" },
+  Volleyball:   { icon: "🏐", color: "from-rose-400 to-pink-600" },
+  "Table Tennis": { icon: "🏓", color: "from-teal-400 to-cyan-600" },
+  Skating:      { icon: "⛸️", color: "from-sky-400 to-indigo-500" },
+  "Martial Arts": { icon: "🥋", color: "from-gray-700 to-gray-900" },
+};
 
 function Game() {
   const [index, setIndex] = useState(0);
+  const [games, setGames] = useState([]);
   const navigate = useNavigate();
 
+  // ✅ DB se sports fetch karo
   useEffect(() => {
+    const fetchSports = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/api/sports");
+        const data = Array.isArray(res.data) ? res.data : res.data.data;
+
+        // DB ke sports ko icon aur color ke saath match karo
+        const mapped = data.map((s) => ({
+          name: s.name,
+          icon: sportConfig[s.name]?.icon || "🏅",
+          color: sportConfig[s.name]?.color || "from-gray-400 to-gray-600",
+        }));
+
+        setGames(mapped);
+      } catch (err) {
+        console.log("Sports fetch error:", err);
+      }
+    };
+    fetchSports();
+  }, []);
+
+  useEffect(() => {
+    if (games.length === 0) return;
     const interval = setInterval(() => {
       setIndex((prev) => (prev + 1) % games.length);
     }, 3000);
     return () => clearInterval(interval);
-  }, []);
+  }, [games]);
 
   return (
     <section className="py-20 bg-slate-50 overflow-hidden">
@@ -50,17 +75,13 @@ function Game() {
               className="w-full sm:w-1/2 lg:w-1/3 px-4 flex-shrink-0"
             >
               <div
-                onClick={() => navigate(`/academis?sport=${game.name}`)}
+                onClick={() => navigate(`/academies?sport=${game.name}`)}
                 className={`
-                  h-[240px]
-                  rounded-3xl
+                  h-[240px] rounded-3xl
                   bg-gradient-to-br ${game.color}
-                  flex flex-col items-center justify-center 
-                  text-white
-                  shadow-xl
-                  hover:scale-105
-                  transition
-                  cursor-pointer
+                  flex flex-col items-center justify-center
+                  text-white shadow-xl
+                  hover:scale-105 transition cursor-pointer
                 `}
               >
                 <span className="text-6xl mb-5">{game.icon}</span>

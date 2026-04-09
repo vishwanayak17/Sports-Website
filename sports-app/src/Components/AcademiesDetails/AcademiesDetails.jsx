@@ -1,5 +1,4 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
 import {
   FaPhoneAlt,
   FaEnvelope,
@@ -10,19 +9,41 @@ import {
   FaRunning,
   FaTrophy,
   FaStar,
-  FaArrowLeft,
-  FaWhatsapp, 
+  FaWhatsapp,
 } from "react-icons/fa";
 import { useParams, useNavigate } from "react-router-dom";
-import academiesFullData from "../../Data/academiesFullData";
+import axios from "axios";
 
 function AcademiesDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const academy = academiesFullData.find(
-    (item) => item.id === id
-  );
+  const [academy, setAcademy] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchAcademy = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/api/academy/single/${id}`
+        );
+        setAcademy(res.data);
+      } catch (err) {
+        console.log("Error fetching academy:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAcademy();
+  }, [id]);
+
+  if (loading)
+    return (
+      <div className="text-center py-20 text-xl font-semibold animate-pulse">
+        Loading...
+      </div>
+    );
 
   if (!academy)
     return (
@@ -35,96 +56,81 @@ function AcademiesDetails() {
     <section className="py-10 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-3 gap-10">
 
-        {/* ================= LEFT SECTION ================= */}
+        {/* LEFT SECTION */}
         <div className="lg:col-span-2 space-y-8">
 
-          {/* HERO / INTRO */}
-          <div className=" mt-14 bg-white shadow-md rounded-2xl p-6 hover:shadow-xl transition">
+          <div className="mt-14 bg-white shadow-md rounded-2xl p-6 hover:shadow-xl transition">
             <h1 className="text-3xl font-bold text-gray-800">
-              {academy.name}
+              {academy.academyName}
             </h1>
-            <p className="text-gray-500 mt-2">
-              {academy.description}
-            </p>
+            <p className="text-gray-500 mt-2">{academy.description}</p>
             <div className="flex items-center gap-2 mt-3 text-sm">
               <FaStar className="text-yellow-400" />
-              <span className="font-medium">
-                {academy.rating} Rating
-              </span>
+              <span className="font-medium">{academy.rating} Rating</span>
             </div>
           </div>
 
           {/* ACHIEVEMENTS */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="shadow-md rounded-xl p-4 text-center bg-white hover:shadow-xl transition">
+            <div className="shadow-md rounded-xl p-4 text-center bg-white">
               <FaTrophy className="mx-auto text-cyan-600 mb-2" />
               <p className="font-semibold">
-                {academy.achievements.players}
+                {academy.achievements?.players || "N/A"}
               </p>
-              <p className="text-sm text-gray-500">
-                State Level Players
-              </p>
+              <p className="text-sm text-gray-500">State Level Players</p>
             </div>
 
-            <div className="shadow-md rounded-xl p-4 text-center bg-white hover:shadow-xl transition">
+            <div className="shadow-md rounded-xl p-4 text-center bg-white">
               <FaUsers className="mx-auto text-cyan-600 mb-2" />
               <p className="font-semibold">
-                {academy.achievements.students}
+                {academy.achievements?.students || "N/A"}
               </p>
-              <p className="text-sm text-gray-500">
-                Students Trained
-              </p>
+              <p className="text-sm text-gray-500">Students Trained</p>
             </div>
 
-            <div className="shadow-md rounded-xl p-4 text-center bg-white hover:shadow-xl transition">
+            <div className="shadow-md rounded-xl p-4 text-center bg-white">
               <FaRunning className="mx-auto text-cyan-600 mb-2" />
               <p className="font-semibold">
-                {academy.achievements.experience}
+                {academy.achievements?.experience || "N/A"}
               </p>
-              <p className="text-sm text-gray-500">
-                Years Experience
-              </p>
+              <p className="text-sm text-gray-500">Years Experience</p>
             </div>
           </div>
 
-          {/* DETAILS CARD */}
-          <div className="bg-white shadow-md rounded-2xl p-6 space-y-5 hover:shadow-xl transition">
+          {/* DETAILS */}
+          <div className="bg-white shadow-md rounded-2xl p-6 space-y-5">
 
-            {/* CONTACT INFO */}
             <div className="grid md:grid-cols-3 gap-4">
-              <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm bg-white hover:shadow-lg transition">
+              <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm">
                 <FaPhoneAlt className="text-cyan-600" />
                 {academy.phone}
               </div>
 
-              <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm bg-white hover:shadow-lg transition">
+              <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm">
                 <FaEnvelope className="text-cyan-600" />
                 {academy.email}
               </div>
 
-              <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm bg-white hover:shadow-lg transition">
+              <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm">
                 <FaClock className="text-cyan-600" />
-                {academy.timing}
+                {academy.timing || "N/A"}
               </div>
             </div>
 
-            {/* ADDRESS */}
-            <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm bg-white hover:shadow-lg transition">
+            <div className="shadow-md rounded-xl p-3 flex gap-2 items-center text-sm">
               <FaMapMarkerAlt className="text-cyan-600" />
-              {academy.address}
+              {academy.address || academy.area + ", " + academy.city}
             </div>
 
-            {/* SPORTS OFFERED */}
+            {/* SPORTS */}
             <div>
-              <h2 className="text-lg font-semibold mb-2">
-                Sports Offered
-              </h2>
+              <h2 className="text-lg font-semibold mb-2">Sports Offered</h2>
               <div className="flex flex-wrap gap-2">
-                {academy.sports.map((sport, i) => (
-                  <span
-                    key={i}
-                    className="px-3 py-1 shadow-md rounded-full text-sm bg-white hover:shadow-lg transition"
-                  >
+                {(Array.isArray(academy.sports)
+                  ? academy.sports
+                  : [academy.sports]
+                ).map((sport, i) => (
+                  <span key={i} className="px-3 py-1 shadow-md rounded-full text-sm">
                     {sport}
                   </span>
                 ))}
@@ -133,32 +139,25 @@ function AcademiesDetails() {
 
             {/* FACILITIES */}
             <div>
-              <h2 className="text-lg font-semibold mb-2">
-                Facilities
-              </h2>
+              <h2 className="text-lg font-semibold mb-2">Facilities</h2>
               <ul className="text-sm text-gray-600 space-y-1">
-                {academy.facilities.map((f, i) => (
+                {academy.facilities?.map((f, i) => (
                   <li key={i}>• {f}</li>
                 ))}
               </ul>
             </div>
 
-            {/* WHO CAN JOIN */}
-            <div className="shadow-md rounded-xl p-3 text-sm bg-white hover:shadow-lg transition">
-              <h2 className="font-semibold mb-1">
-                Who Can Join?
-              </h2>
-              Boys & Girls | Age: 8 – 25 Years | Beginner to Advanced
+            <div className="shadow-md rounded-xl p-3 text-sm">
+              <h2 className="font-semibold mb-1">Who Can Join?</h2>
+              Boys & Girls | Age: 8 – 25 Years
             </div>
           </div>
 
           {/* GALLERY */}
-          <div className="bg-white shadow-md rounded-2xl p-4 hover:shadow-xl transition">
-            <h2 className="text-lg font-semibold mb-3">
-              Training Moments
-            </h2>
+          <div className="bg-white shadow-md rounded-2xl p-4">
+            <h2 className="text-lg font-semibold mb-3">Training Moments</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-              {academy.gallery.map((img, i) => (
+              {academy.gallery?.map((img, i) => (
                 <img
                   key={i}
                   src={img}
@@ -170,59 +169,58 @@ function AcademiesDetails() {
           </div>
         </div>
 
-        {/* ================= RIGHT SECTION ================= */}
+        {/* RIGHT SECTION */}
         <div>
-          <div className=" sticky top-30 bg-white shadow-xl rounded-2xl p-6 space-y-4">
+          <div className="sticky top-30 bg-white shadow-xl rounded-2xl p-6 space-y-4">
 
-            <h3 className="font-semibold text-lg text-gray-800">
-              Contact Academy
-            </h3>
+            <h3 className="font-semibold text-lg">Contact Academy</h3>
 
-            {/* 📞 CALL BUTTON */}
+            {/* CALL BUTTON */}
             <a
-              href="tel:7698684784"
-              className="flex items-center justify-center gap-2 bg-orange-500 hover:bg-indigo-600 text-white py-2 rounded-lg transition"
+              href={`tel:${academy.phone}`}
+              className="flex items-center justify-center gap-2 bg-orange-500 text-white py-2 rounded-lg"
             >
               <FaPhoneAlt />
               Call
             </a>
 
-            {/* 💬 WHATSAPP BUTTON */}
+            {/* WHATSAPP BUTTON */}
             <a
-              href="https://wa.me/917698684784"
+              href={`https://wa.me/91${academy.phone}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 bg-green-600 hover:bg-green-600 text-white py-2 rounded-lg transition"
+              className="flex items-center justify-center gap-2 bg-green-600 text-white py-2 rounded-lg"
             >
               <FaWhatsapp />
-              Send Message on WhatsApp
+              WhatsApp
             </a>
 
+            {/* MAP */}
             <iframe
               className="w-full h-40 rounded-xl border"
               loading="lazy"
               src={`https://www.google.com/maps?q=${encodeURIComponent(
-                academy.address
+                academy.address || academy.area + " " + academy.city
               )}&output=embed`}
-              title="Academy Map"
+              title="map"
             ></iframe>
 
+            {/* SHARE */}
             <button
               onClick={() => {
                 if (navigator.share) {
                   navigator.share({
-                    title: academy.name,
-                    text: `Check out ${academy.name} on our Sports Portal`,
+                    title: academy.academyName,
+                    text: `Check out ${academy.academyName}`,
                     url: window.location.href,
                   });
                 } else {
-                  alert("Sharing not supported on this browser");
+                  alert("Not supported");
                 }
               }}
-              className="flex items-center justify-center gap-2 w-full py-2 shadow-md rounded-lg hover:bg-gray-100 transition"
+              className="w-full py-2 shadow-md rounded-lg"
             >
-              <FaShareAlt />
-              Share Academy
+              <FaShareAlt /> Share
             </button>
 
           </div>
