@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
-
 import {
   FaFacebookF,
   FaInstagram,
@@ -11,132 +9,119 @@ import {
   FaEnvelope,
 } from "react-icons/fa";
 
-import logo from "../../assets/sportimg.png"; // your logo path
-
+import logo from "../../assets/sportimg.png";
 
 const Footer = () => {
-
   return (
-    <footer className="mt-24 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-950 text-blue-100">
-      
+    <footer className="mt-24 bg-gradient-to-br from-blue-950 via-blue-900 to-black text-blue-100">
+
       <div className="max-w-7xl mx-auto px-6 py-16 grid gap-10 sm:grid-cols-2 md:grid-cols-4">
 
-        {/* Academy Info */}
-        <div className="transition hover:-translate-y-1">
-
-          {/* ✅ Logo + Name */}
-          <div className="flex items-center gap-3 mb-3">
-            <img
-              src={logo}
-              alt="Sports Academy Logo"
-              className="h-12 w-auto"
-            />
+        {/* Logo + About */}
+        <div>
+          <div className="flex items-center gap-3 mb-4">
+            <img src={logo} alt="logo" className="h-12" />
             <h2 className="text-xl font-bold text-white">
               Sports Academy
             </h2>
           </div>
-
-          <p className="text-sm leading-relaxed text-blue-200">
+          <p className="text-sm text-blue-300 leading-relaxed">
             Professional sports training centers in{" "}
             <span className="text-white font-semibold">Ahmedabad</span> &{" "}
             <span className="text-white font-semibold">Gandhinagar</span>.
-            Train with expert coaches and world-class facilities.
+            Train with expert coaches and modern facilities.
           </p>
         </div>
 
         {/* Locations */}
-        <div className="transition hover:-translate-y-1">
-          <h3 className="text-lg font-semibold text-white mb-4">
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4 border-b border-blue-700 pb-2">
             Our Locations
           </h3>
-
           <ul className="space-y-4 text-sm">
-            <li className="flex items-start gap-3 group cursor-pointer">
-              <FaMapMarkerAlt className="mt-1 text-cyan-400 group-hover:scale-110 transition" />
-              <span className="group-hover:text-white transition">
+            <li className="flex items-start gap-3 hover:text-white transition">
+              <FaMapMarkerAlt className="mt-1 text-cyan-400" />
+              <span>
                 <b>Ahmedabad</b><br />
                 Navrangpura, Bopal, Maninagar
               </span>
             </li>
-
-            <li className="flex items-start gap-3 group cursor-pointer">
-              <FaMapMarkerAlt className="mt-1 text-cyan-400 group-hover:scale-110 transition" />
-              <span className="group-hover:text-white transition">
+            <li className="flex items-start gap-3 hover:text-white transition">
+              <FaMapMarkerAlt className="mt-1 text-cyan-400" />
+              <span>
                 <b>Gandhinagar</b><br />
                 Sector 11, Sector 21, Kudasan
               </span>
             </li>
           </ul>
         </div>
-{/* Sports Programs */}
-<div className="transition hover:-translate-y-1">
-  <h3 className="text-lg font-semibold text-white mb-4">
-    Training Programs
-  </h3>
 
-  <ul className="space-y-2 text-sm">
-    {[
-  { sport: "Cricket", name: "🏏 Cricket Academy" },
-  { sport: "Football", name: "⚽ Football Academy" },
-  { sport: "Basketball", name: "🏀 Basketball Training" },
-  { sport: "Badminton", name: "🏸 Badminton Coaching" },
-  { sport: "Swimming", name: "🏊 Swimming Classes" },
-]
-.map((sport) => (
-      <li key={sport.id}>
-        <Link
-          to={`/academis?sport=${sport.sport}`}
-          className="hover:text-white hover:translate-x-1 transition cursor-pointer block"
-        >
-          {sport.name}
-        </Link>
-      </li>
-    ))}
-  </ul>
-</div>
+        {/* Quick Links */}
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4 border-b border-blue-700 pb-2">
+            Quick Links
+          </h3>
+          <ul className="space-y-3 text-sm">
+            {[
+              { label: "Home", path: "/" },
+              { label: "Academies", path: "/academies" },
+              { label: "About Us", path: "/about" },
+              { label: "Contact", path: "/Contactus" },
+            ].map(({ label, path }) => (
+              <li key={path}>
+                <Link
+                  to={path}
+                  className="flex items-center gap-2 hover:text-cyan-400 transition group"
+                >
+                  <span className="text-cyan-500 group-hover:translate-x-1 transition-transform duration-200">
+                    ›
+                  </span>
+                  {label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
 
-
-        {/* Contact & Social */}
-        <div className="transition hover:-translate-y-1">
-          <h3 className="text-lg font-semibold text-white mb-4">
+        {/* Contact */}
+        <div>
+          <h3 className="text-lg font-semibold text-white mb-4 border-b border-blue-700 pb-2">
             Contact Us
           </h3>
 
-          <p className="flex items-center gap-3 text-sm hover:text-white transition cursor-pointer">
+          <p className="flex items-center gap-3 text-sm hover:text-white transition">
             <FaPhoneAlt className="text-green-400" />
-            +91 8320251290,7698684784
+            +91 8320251290
           </p>
 
-          <p className="flex items-center gap-3 text-sm mt-3 hover:text-white transition cursor-pointer">
+          <p className="flex items-center gap-3 text-sm mt-3 hover:text-white transition">
             <FaEnvelope className="text-yellow-300" />
             abc01@gmail.com
           </p>
 
+          {/* Social Icons */}
           <div className="flex gap-4 mt-6">
-            {[FaFacebookF, FaInstagram, FaYoutube].map(
-              (Icon, index) => (
-                <span
-                  key={index}
-                  className="
-                    p-2 rounded-full bg-blue-800/60 backdrop-blur
-                    hover:bg-cyan-500 hover:text-black
-                    hover:scale-110 hover:rotate-6
-                    transition duration-300 cursor-pointer
-                  "
-                >
-                  <Icon />
-                </span>
-              )
-            )}
+            {[FaFacebookF, FaInstagram, FaYoutube].map((Icon, index) => (
+              <div
+                key={index}
+                className="w-10 h-10 flex items-center justify-center
+                rounded-full bg-blue-800 hover:bg-cyan-400
+                hover:text-black transition duration-300 cursor-pointer
+                shadow-md hover:shadow-cyan-400/40"
+              >
+                <Icon />
+              </div>
+            ))}
           </div>
         </div>
+
       </div>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-blue-700/50 py-4 text-center text-xs text-blue-200">
-        Serving Ahmedabad & Gandhinagar · ©{" "}
-        {new Date().getFullYear()} Sports Academy
+      {/* Bottom */}
+      <div className="border-t border-blue-700/40 py-4 text-center text-xs text-blue-300">
+        © {new Date().getFullYear()} Sports Academy · All Rights Reserved
       </div>
+
     </footer>
   );
 };
