@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import academiesFullData from "../../Data/academiesFullData";
 
-function Tablelist() {
-  const navigate = useNavigate();
-
-  // 🔹 filter state
+function Tablelist({ onRowClick }) {
   const [filter, setFilter] = useState("all");
 
   const filteredData =
@@ -13,13 +9,12 @@ function Tablelist() {
       ? academiesFullData
       : academiesFullData.filter((academy) => {
           const status = academy.status?.toLowerCase();
-
           if (filter === "approved") return status === "active" || status === "approved";
           if (filter === "pending") return status === "pending";
           if (filter === "rejected") return status === "rejected";
-
           return true;
         });
+
   return (
     <div className="bg-white/80 backdrop-blur p-6 rounded-3xl shadow">
 
@@ -27,11 +22,10 @@ function Tablelist() {
       <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-6 gap-4">
         <h2 className="text-2xl font-bold">Academies List</h2>
 
-        {/* FILTER BUTTONS */}
         <div className="flex gap-2 flex-wrap">
-          <FilterBtn label="All" value="all" filter={filter} setFilter={setFilter} />
+          <FilterBtn label="All"      value="all"      filter={filter} setFilter={setFilter} />
           <FilterBtn label="Approved" value="approved" filter={filter} setFilter={setFilter} />
-          <FilterBtn label="Pending" value="pending" filter={filter} setFilter={setFilter} />
+          <FilterBtn label="Pending"  value="pending"  filter={filter} setFilter={setFilter} />
           <FilterBtn label="Rejected" value="rejected" filter={filter} setFilter={setFilter} />
         </div>
       </div>
@@ -52,22 +46,19 @@ function Tablelist() {
             {filteredData.map((academy) => (
               <tr
                 key={academy.id}
-                className="border-b hover:bg-gray-50 transition"
+                onClick={() => onRowClick && onRowClick(academy)}
+                className="border-b hover:bg-blue-50 cursor-pointer transition"
               >
-                {/* CLICKABLE NAME */}
-                <td
-                  onClick={() => navigate(`/academy/${academy.id}`)}
-                  className="py-3 font-medium text-blue-600 cursor-pointer hover:underline"
-                >
+                <td className="py-3 font-medium text-blue-600 hover:underline">
                   {academy.name}
                 </td>
 
-                <td>{academy.city}</td>
+                <td className="py-3 text-gray-600">{academy.city}</td>
 
-                <td>{academy.sports.join(", ")}</td>
+                <td className="py-3 text-gray-600">{academy.sports.join(", ")}</td>
 
                 <td
-                  className={`font-medium ${
+                  className={`py-3 font-medium capitalize ${
                     academy.status === "approved"
                       ? "text-green-600"
                       : academy.status === "pending"
@@ -91,18 +82,13 @@ function Tablelist() {
 
 export default Tablelist;
 
-/* 🔹 FILTER BUTTON COMPONENT */
-
 function FilterBtn({ label, value, filter, setFilter }) {
   const active = filter === value;
-
   return (
     <button
       onClick={() => setFilter(value)}
-      className={`px-4 py-1 rounded-lg text-sm font-medium transition
-      ${active
-        ? "bg-blue-600 text-white"
-        : "bg-gray-200 hover:bg-gray-300"
+      className={`px-4 py-1 rounded-lg text-sm font-medium transition ${
+        active ? "bg-blue-600 text-white" : "bg-gray-200 hover:bg-gray-300"
       }`}
     >
       {label}
