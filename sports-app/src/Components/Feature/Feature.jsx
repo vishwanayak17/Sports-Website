@@ -9,16 +9,14 @@ function Feature() {
   useEffect(() => {
     const fetchAcademies = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/api/academy");
+        const res = await axios.get("http://localhost:5000/api/academies"); // ✅ plural fix
         const data = Array.isArray(res.data) ? res.data : res.data.data;
 
-        // ✅ Unique academies - same name wali duplicate hata do
         const unique = data.filter(
           (academy, index, self) =>
             index === self.findIndex((a) => a.academyName === academy.academyName)
         );
 
-        // ✅ Rating high to low sort
         const sorted = unique.sort((a, b) => b.rating - a.rating);
         setFeaturedAcademies(sorted.slice(0, 6));
       } catch (err) {
@@ -47,7 +45,7 @@ function Feature() {
             className="bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition cursor-pointer"
           >
             <img
-              src={academy.image}
+              src={academy.image || "https://via.placeholder.com/300"} // ✅ fallback image
               alt={academy.academyName}
               className="h-52 w-full object-cover"
             />
@@ -56,7 +54,7 @@ function Feature() {
                 {academy.academyName}
               </h3>
               <p className="text-sm text-gray-600">
-                ⭐ {academy.rating} Rating
+                ⭐ {academy.rating ?? "N/A"} Rating  {/* ✅ rating fallback */}
               </p>
               <p className="text-xs text-gray-500">
                 {academy.city}

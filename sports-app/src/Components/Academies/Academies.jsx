@@ -10,7 +10,6 @@ function Academies() {
   const params = new URLSearchParams(locationHook.search);
   const cityParam = params.get("city") || "";
   const sportParam = params.get("sport") || "";
-
   const [sportsList, setSportsList] = useState([]);
   const [locationsList, setLocationsList] = useState([]);
   const [sportValue, setSportValue] = useState(sportParam);

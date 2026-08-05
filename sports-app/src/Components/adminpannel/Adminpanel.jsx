@@ -1,57 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
-  LayoutDashboard,
-  Building2,
-  Settings,
-  Menu,
-  Bell,
-  Search,
-  ArrowLeft,
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Star,
+  LayoutDashboard, Building2, Settings, Menu, Bell,
+  Search, ArrowLeft, MapPin, Phone, Mail, Clock,
+  Star, LogOut,
 } from "lucide-react";
 
 import Tablelist from "../Tablelist/Tablelist";
 import logo from "../../assets/sportimg.png";
+import API from "../../api/axios";
+import { useNavigate } from "react-router-dom";
 
-// ─────────────────────────────────────────────────────────────────────
 export default function SportsAdminPanel() {
   const [open, setOpen]                       = useState(true);
   const [active, setActive]                   = useState("Dashboard");
   const [selectedAcademy, setSelectedAcademy] = useState(null);
   const [academySubTab, setAcademySubTab]     = useState("overview");
   const [showForm, setShowForm]               = useState(false);
-  const [form, setForm]                       = useState({ name: "", city: "", sport: "" });
 
-  const handleSubmit = () => {
-    console.log("New Academy:", form);
-    setForm({ name: "", city: "", sport: "" });
-    setShowForm(false);
+  // ✅ UPDATED: 8 fields
+  const [form, setForm] = useState({
+    academyName: "",
+    name: "",
+    email: "",
+    password: "",
+    phone: "",
+    city: "",
+    area: "",
+    sport: "",
+  });
+
+  const navigate = useNavigate();
+
+  // ✅ UPDATED: API call with all fields
+  const handleSubmit = async () => {
+    if (!form.academyName || !form.name || !form.email || !form.password || !form.phone || !form.city || !form.area || !form.sport) {
+      // alert("Sabhi fields bharo!");
+      return;
+    }
+    try {
+      const res = await API.post("/admin/academies", form);
+      if (res.data.success) {
+        // alert("Academy add ho gayi! ✅");
+        setForm({ academyName: "", name: "", email: "", password: "", phone: "", city: "", area: "", sport: "" });
+        setShowForm(false);
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Kuch galat ho gaya!");
+    }
   };
 
-  // Jab academy row pe click ho — detail view kholta hai
   const handleSelectAcademy = (academy) => {
     setSelectedAcademy(academy);
     setAcademySubTab("overview");
   };
 
-  // Back button — list pe wapas
-  const handleBack = () => {
-    setSelectedAcademy(null);
-  };
+  const handleBack = () => setSelectedAcademy(null);
 
-  // Sidebar nav click — page change + detail band
   const handleNavClick = (label) => {
     setActive(label);
     setSelectedAcademy(null);
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem("admin");
+    localStorage.removeItem("adminToken");
+    window.dispatchEvent(new Event("loginSuccess"));
+    navigate("/");
+  };
+
   return (
-    <div className="flex min-h-screen bg-gradient-to-br from-slate-100 mt-20 to-slate-200">
+    <div className="flex min-h-screen bg-gradient-to-br from-slate-100 to-slate-200">
 
       {/* ── SIDEBAR ── */}
       <motion.aside
@@ -73,35 +92,35 @@ export default function SportsAdminPanel() {
           <MenuItem icon={<Building2 />}       label="Academies" open={open} active={active} setActive={handleNavClick} />
           <MenuItem icon={<Settings />}        label="Settings"  open={open} active={active} setActive={handleNavClick} />
         </nav>
+
+        <div className="mt-auto p-3 border-t border-slate-700">
+          <div
+            onClick={handleLogout}
+            className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-red-600 transition text-white"
+          >
+            <LogOut size={20} />
+            {open && <span>Logout</span>}
+          </div>
+        </div>
       </motion.aside>
 
       {/* ── MAIN ── */}
       <div className="flex-1 flex flex-col">
 
-        {/* TOPBAR */}
         <header className="bg-white/80 backdrop-blur shadow px-6 py-3 flex justify-between items-center">
-          <div className="flex items-center gap-3 bg-slate-100 px-3 py-2 rounded-lg w-72">
-            <Search size={18} />
-            <input className="bg-transparent outline-none w-full text-sm" placeholder="Search..." />
-          </div>
-          <div className="flex items-center gap-4">
-            <Bell className="cursor-pointer" />
+          <h2 className="text-lg font-semibold text-gray-700">{active}</h2>
+          <div className="flex items-center gap-4 mr-4">
             <img src={logo} className="w-10 h-10 rounded-full object-cover" alt="avatar" />
           </div>
         </header>
 
-        {/* CONTENT */}
         <main className="p-6 overflow-y-auto">
 
-          {/* DASHBOARD */}
           {active === "Dashboard" && <DashboardSection />}
 
-          {/* ACADEMIES */}
           {active === "Academies" && (
             <div className="space-y-4">
-
               {selectedAcademy ? (
-                /* ── DETAIL VIEW ── */
                 <AcademyDetail
                   academy={selectedAcademy}
                   subTab={academySubTab}
@@ -109,7 +128,6 @@ export default function SportsAdminPanel() {
                   onBack={handleBack}
                 />
               ) : (
-                /* ── LIST VIEW ── */
                 <>
                   <div className="flex justify-between items-center">
                     <h2 className="text-2xl font-bold text-gray-700">Academies</h2>
@@ -121,22 +139,57 @@ export default function SportsAdminPanel() {
                     </button>
                   </div>
 
+                  {/* ✅ UPDATED FORM */}
                   {showForm && (
                     <div className="bg-white p-5 rounded-xl shadow-md grid grid-cols-1 md:grid-cols-3 gap-4">
                       <input
                         placeholder="Academy Name"
+                        value={form.academyName}
+                        onChange={(e) => setForm({ ...form, academyName: e.target.value })}
+                        className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                      <input
+                        placeholder="Owner Name"
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
                         className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                       />
                       <input
-                        placeholder="City"
-                        value={form.city}
-                        onChange={(e) => setForm({ ...form, city: e.target.value })}
+                        placeholder="Email"
+                        value={form.email}
+                        onChange={(e) => setForm({ ...form, email: e.target.value })}
                         className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
                       />
                       <input
-                        placeholder="Sport"
+                        placeholder="Password"
+                        type="password"
+                        value={form.password}
+                        onChange={(e) => setForm({ ...form, password: e.target.value })}
+                        className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                      <input
+                        placeholder="Phone"
+                        value={form.phone}
+                        onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                        className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                      <select
+                        value={form.city}
+                        onChange={(e) => setForm({ ...form, city: e.target.value })}
+                        className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      >
+                        <option value="">Select City</option>
+                        <option value="Ahmedabad">Ahmedabad</option>
+                        <option value="Gandhinagar">Gandhinagar</option>
+                      </select>
+                      <input
+                        placeholder="Area"
+                        value={form.area}
+                        onChange={(e) => setForm({ ...form, area: e.target.value })}
+                        className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
+                      />
+                      <input
+                        placeholder="Sport (e.g. Cricket)"
                         value={form.sport}
                         onChange={(e) => setForm({ ...form, sport: e.target.value })}
                         className="border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
@@ -158,14 +211,12 @@ export default function SportsAdminPanel() {
                     </div>
                   )}
 
-                  {/* Tablelist — onRowClick pass kar rahe hain */}
                   <Tablelist onRowClick={handleSelectAcademy} />
                 </>
               )}
             </div>
           )}
 
-          {/* SETTINGS */}
           {active === "Settings" && <SettingsSection />}
 
         </main>
@@ -174,15 +225,8 @@ export default function SportsAdminPanel() {
   );
 }
 
-// ─────────────────────────────────────────────────────────────────────
-// ACADEMY DETAIL COMPONENT
-// academiesFullData ke real fields use kar raha hai:
-// name, image, area, city, rating, sports, status,
-// phone, email, timing, address,
-// description, achievements, facilities, gallery, map
-// ─────────────────────────────────────────────────────────────────────
+// ─── Academy Detail ───────────────────────────────────────────────────
 function AcademyDetail({ academy, subTab, setSubTab, onBack }) {
-
   const statusStyle = {
     approved: "bg-green-100 text-green-700",
     pending:  "bg-yellow-100 text-yellow-700",
@@ -193,8 +237,6 @@ function AcademyDetail({ academy, subTab, setSubTab, onBack }) {
 
   return (
     <div className="space-y-5">
-
-      {/* ── Breadcrumb + Back ── */}
       <div className="flex items-center gap-3">
         <button
           onClick={onBack}
@@ -209,79 +251,57 @@ function AcademyDetail({ academy, subTab, setSubTab, onBack }) {
         </span>
       </div>
 
-      {/* ── Header Card ── */}
       <div className="bg-white rounded-xl shadow-md overflow-hidden">
-
-        {/* Cover Image */}
         <div className="relative h-52 w-full">
-          <img
-            src={academy.image}
-            alt={academy.name}
-            className="w-full h-full object-cover"
-          />
+        <img
+  src={academy.image || "https://placehold.co/800x300"}
+  alt={academy.name}
+  className="w-full h-full object-cover"
+/>
           <div className="absolute inset-0 bg-black/35" />
-
-          {/* Name + Area on image */}
           <div className="absolute bottom-4 left-5 text-white">
             <h2 className="text-2xl font-bold drop-shadow">{academy.name}</h2>
             <div className="flex items-center gap-1 mt-1 text-white/90 text-sm">
               <MapPin size={13} />
-              <span>{academy.area}, {academy.city}</span>
+              <span>{academy.area || "N/A"}, {academy.city || "N/A"}</span>
             </div>
           </div>
-
-          {/* Rating badge */}
           <div className="absolute top-4 right-4 flex items-center gap-1 bg-white/90 px-2.5 py-1 rounded-lg shadow">
             <Star size={13} className="text-yellow-500 fill-yellow-500" />
-            <span className="text-sm font-semibold text-gray-700">{academy.rating}</span>
+            <span className="text-sm font-semibold text-gray-700">{academy.rating || "N/A"}</span>
           </div>
         </div>
 
-        {/* Info below image */}
         <div className="p-5">
-
-          {/* Sports tags + Status + Buttons */}
           <div className="flex items-center justify-between flex-wrap gap-3 mb-5">
             <div className="flex items-center gap-2 flex-wrap">
-              {academy.sports.map((sport) => (
+              {academy.sports?.map((sport) => (
                 <span key={sport} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold">
                   {sport}
                 </span>
               ))}
               <span className={`px-3 py-1 rounded-full text-xs font-semibold capitalize ${statusStyle[academy.status] || "bg-gray-100 text-gray-600"}`}>
-                {academy.status}
+                {academy.status || "pending"}
               </span>
-            </div>
-            <div className="flex gap-2">
-              <button className="border border-gray-300 text-gray-600 px-4 py-1.5 rounded-lg text-sm hover:bg-gray-50 transition">
-                Edit
-              </button>
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-1.5 rounded-lg text-sm shadow transition">
-                Message
-              </button>
             </div>
           </div>
 
-          {/* Contact grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InfoItem icon={<Phone size={13} />}  label="Phone"   value={academy.phone} />
-            <InfoItem icon={<Mail size={13} />}   label="Email"   value={academy.email} isEmail />
-            <InfoItem icon={<Clock size={13} />}  label="Timing"  value={academy.timing} />
-            <InfoItem icon={<MapPin size={13} />} label="Address" value={academy.address} />
+            <InfoItem icon={<Phone size={13} />}  label="Phone"   value={academy.phone   || "N/A"} />
+            <InfoItem icon={<Mail size={13} />}   label="Email"   value={academy.email   || "N/A"} isEmail />
+            <InfoItem icon={<Clock size={13} />}  label="Timing"  value={academy.timing  || "N/A"} />
+            <InfoItem icon={<MapPin size={13} />} label="Address" value={academy.address || "N/A"} />
           </div>
         </div>
       </div>
 
-      {/* ── Tabs ── */}
       <div className="flex border-b border-gray-200 gap-1">
         {tabs.map((tab) => (
           <button
             key={tab}
             onClick={() => setSubTab(tab)}
             className={`px-5 py-2.5 text-sm font-medium capitalize border-b-2 transition-colors ${
-              subTab === tab
-                ? "border-blue-600 text-blue-600"
-                : "border-transparent text-gray-500 hover:text-gray-700"
+              subTab === tab ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
             {tab}
@@ -289,69 +309,54 @@ function AcademyDetail({ academy, subTab, setSubTab, onBack }) {
         ))}
       </div>
 
-      {/* ── Tab: Overview ── */}
       {subTab === "overview" && (
         <div className="space-y-4">
           <div className="bg-white rounded-xl shadow-md p-5">
             <h3 className="font-semibold text-gray-700 mb-2">About</h3>
-            <p className="text-sm text-gray-600 leading-relaxed">{academy.description}</p>
+            <p className="text-sm text-gray-600 leading-relaxed">{academy.description || "No description available."}</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <AchievCard label="Players Trained" value={academy.achievements.players}    color="blue" />
-            <AchievCard label="Total Students"  value={academy.achievements.students}   color="green" />
-            <AchievCard label="Experience"      value={academy.achievements.experience} color="purple" />
-          </div>
+          {academy.achievements && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <AchievCard label="Players Trained" value={academy.achievements.players    || "N/A"} color="blue" />
+              <AchievCard label="Total Students"  value={academy.achievements.students   || "N/A"} color="green" />
+              <AchievCard label="Experience"      value={academy.achievements.experience || "N/A"} color="purple" />
+            </div>
+          )}
         </div>
       )}
 
-      {/* ── Tab: Facilities ── */}
       {subTab === "facilities" && (
         <div className="bg-white rounded-xl shadow-md p-5">
           <h3 className="font-semibold text-gray-700 mb-4">Facilities</h3>
           <div className="flex flex-wrap gap-3">
-            {academy.facilities.map((facility, i) => (
-              <span
-                key={i}
-                className="bg-blue-50 text-blue-700 border border-blue-200 px-4 py-2 rounded-lg text-sm font-medium"
-              >
-                {facility}
-              </span>
-            ))}
+            {academy.facilities?.length > 0 ? academy.facilities.map((f, i) => (
+              <span key={i} className="bg-blue-50 text-blue-700 border border-blue-200 px-4 py-2 rounded-lg text-sm font-medium">{f}</span>
+            )) : <p className="text-gray-400 text-sm">No facilities listed.</p>}
           </div>
         </div>
       )}
 
-      {/* ── Tab: Gallery ── */}
       {subTab === "gallery" && (
         <div className="bg-white rounded-xl shadow-md p-5">
           <h3 className="font-semibold text-gray-700 mb-4">Gallery</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {academy.gallery.map((img, i) => (
-              <img
-                key={i}
-                src={img}
-                alt={`gallery-${i}`}
-                className="w-full h-44 object-cover rounded-lg"
-              />
-            ))}
+            {academy.gallery?.length > 0 ? academy.gallery.map((img, i) => (
+              <img key={i} src={img} alt={`gallery-${i}`} className="w-full h-44 object-cover rounded-lg" />
+            )) : <p className="text-gray-400 text-sm">No gallery images.</p>}
           </div>
         </div>
       )}
 
-      {/* ── Tab: Map ── */}
       {subTab === "map" && (
         <div className="bg-white rounded-xl shadow-md p-5">
           <h3 className="font-semibold text-gray-700 mb-4">Location</h3>
-          <iframe
-            src={academy.map}
-            title="Academy Location"
-            className="w-full h-72 rounded-lg border border-gray-200"
-            allowFullScreen
-            loading="lazy"
-          />
+          {academy.map ? (
+            <iframe src={academy.map} title="Academy Location" className="w-full h-72 rounded-lg border border-gray-200" allowFullScreen loading="lazy" />
+          ) : (
+            <p className="text-gray-400 text-sm">No map available.</p>
+          )}
         </div>
       )}
-
     </div>
   );
 }
@@ -363,9 +368,7 @@ function InfoItem({ icon, label, value, isEmail }) {
       <span className="text-gray-400 mt-0.5 flex-shrink-0">{icon}</span>
       <div>
         <p className="text-xs text-gray-400 uppercase tracking-wider mb-0.5">{label}</p>
-        <p className={`text-sm font-medium ${isEmail ? "text-blue-600" : "text-gray-800"}`}>
-          {value}
-        </p>
+        <p className={`text-sm font-medium ${isEmail ? "text-blue-600" : "text-gray-800"}`}>{value}</p>
       </div>
     </div>
   );
@@ -391,8 +394,7 @@ function MenuItem({ icon, label, open, active, setActive }) {
   return (
     <div
       onClick={() => setActive(label)}
-      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition
-      ${active === label ? "bg-blue-600" : "hover:bg-slate-800"}`}
+      className={`flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition ${active === label ? "bg-blue-600" : "hover:bg-slate-800"}`}
     >
       {icon}
       {open && <span>{label}</span>}
@@ -402,28 +404,48 @@ function MenuItem({ icon, label, open, active, setActive }) {
 
 // ─── Dashboard ────────────────────────────────────────────────────────
 function DashboardSection() {
-  const [requests, setRequests] = useState([
-    { id: 1, name: "Star Cricket Academy",   status: "Pending" },
-    { id: 2, name: "Elite Football Academy", status: "Pending" },
-    { id: 3, name: "Ace Badminton Academy",  status: "Pending" },
-  ]);
+  const [stats, setStats]       = useState({ total: 0, pending: 0, rejected: 0, approved: 0 });
+  const [requests, setRequests] = useState([]);
 
-  const handleStatus = (id, newStatus) => {
-    setRequests((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, status: newStatus } : item))
-    );
+  useEffect(() => { fetchData(); }, []);
+
+  const fetchData = async () => {
+    try {
+      const res = await API.get("/academies");
+      if (res.data.success) {
+        const all = res.data.data;
+        setStats({
+          total:    all.length,
+          pending:  all.filter(a => !a.status || a.status === "pending").length,
+          rejected: all.filter(a => a.status === "rejected").length,
+          approved: all.filter(a => a.status === "approved").length,
+        });
+        setRequests(all.filter(a => !a.status || a.status === "pending"));
+      }
+    } catch (error) { console.log(error); }
+  };
+
+  const handleStatus = async (id, newStatus) => {
+    try {
+      const res = await API.put(`/admin/academies/${id}/status`, { status: newStatus.toLowerCase() });
+      if (res.data.success) {
+        alert(`Academy ${newStatus} successfully! ✅`);
+        fetchData();
+      }
+    } catch (error) {
+      alert(error.response?.data?.message || "Something went wrong!");
+    }
   };
 
   return (
     <div className="space-y-8">
       <h2 className="text-2xl font-bold text-gray-700">Admin Dashboard</h2>
-
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
-        <StatCard title="Total Academies" value="25"  color="blue" />
-        <StatCard title="Pending"  value={requests.filter((r) => r.status === "Pending").length}  color="yellow" />
-        <StatCard title="Rejected" value={requests.filter((r) => r.status === "Rejected").length} color="red" />
-        <StatCard title="Approved" value={requests.filter((r) => r.status === "Approved").length} color="green" />
-        <StatCard title="Users"    value="120" color="purple" />
+        <StatCard title="Total Academies" value={stats.total}    color="blue" />
+        <StatCard title="Pending"         value={stats.pending}  color="yellow" />
+        <StatCard title="Rejected"        value={stats.rejected} color="red" />
+        <StatCard title="Approved"        value={stats.approved} color="green" />
+        <StatCard title="Users"           value="120"            color="purple" />
       </div>
 
       <div className="bg-white p-6 rounded-xl shadow-md">
@@ -437,30 +459,22 @@ function DashboardSection() {
             </tr>
           </thead>
           <tbody>
-            {requests.map((item) => (
-              <tr key={item.id} className="border-b hover:bg-gray-50">
-                <td className="py-3 px-2">{item.name}</td>
-                <td className="py-3 px-2 text-center font-medium">{item.status}</td>
-                <td className="py-3 px-2 text-center">
-                  {item.status === "Pending" && (
+            {requests.length === 0 ? (
+              <tr><td colSpan="3" className="text-center py-6 text-gray-400">No pending requests</td></tr>
+            ) : (
+              requests.map((item) => (
+                <tr key={item._id} className="border-b hover:bg-gray-50">
+                  <td className="py-3 px-2">{item.name}</td>
+                  <td className="py-3 px-2 text-center font-medium text-yellow-600 capitalize">{item.status || "pending"}</td>
+                  <td className="py-3 px-2 text-center">
                     <div className="flex justify-center gap-3">
-                      <button
-                        onClick={() => handleStatus(item.id, "Approved")}
-                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded"
-                      >
-                        Active
-                      </button>
-                      <button
-                        onClick={() => handleStatus(item.id, "Rejected")}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
-                      >
-                        Reject
-                      </button>
+                      <button onClick={() => handleStatus(item._id, "approved")} className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded">Approve</button>
+                      <button onClick={() => handleStatus(item._id, "rejected")} className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded">Reject</button>
                     </div>
-                  )}
-                </td>
-              </tr>
-            ))}
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>
@@ -487,15 +501,102 @@ function StatCard({ title, value, color }) {
 
 // ─── Settings ─────────────────────────────────────────────────────────
 function SettingsSection() {
+  const [profile, setProfile]   = useState({ name: "", email: "", phone: "" });
+  const [passForm, setPassForm] = useState({ currentPassword: "", newPassword: "", confirmPassword: "" });
+  const [profileLoading, setProfileLoading] = useState(false);
+  const [passLoading, setPassLoading]       = useState(false);
+  const [profileMsg, setProfileMsg]         = useState({ text: "", type: "" });
+  const [passMsg, setPassMsg]               = useState({ text: "", type: "" });
+
+  useEffect(() => { fetchProfile(); }, []);
+
+  const fetchProfile = async () => {
+    try {
+      const res = await API.get("/admin/profile");
+      if (res.data.success) {
+        setProfile({
+          name:  res.data.data.name  || "",
+          email: res.data.data.email || "",
+          phone: res.data.data.phone || "",
+        });
+      }
+    } catch (error) { console.log("Profile fetch error:", error); }
+  };
+
+  const handleProfileSave = async () => {
+    if (!profile.name || !profile.email)
+      return setProfileMsg({ text: "Name and email are required.", type: "error" });
+
+    setProfileLoading(true);
+    setProfileMsg({ text: "", type: "" });
+    try {
+      const res = await API.put("/admin/update-profile", profile);
+      if (res.data.success)
+        setProfileMsg({ text: "Profile updated successfully! ✅", type: "success" });
+    } catch (err) {
+      setProfileMsg({ text: err.response?.data?.message || "Something went wrong!", type: "error" });
+    } finally { setProfileLoading(false); }
+  };
+
+  const handlePassChange = (e) => setPassForm({ ...passForm, [e.target.name]: e.target.value });
+
+  const handlePasswordChange = async () => {
+    if (!passForm.currentPassword || !passForm.newPassword || !passForm.confirmPassword)
+      return setPassMsg({ text: "Please fill all fields.", type: "error" });
+    if (passForm.newPassword.length < 6)
+      return setPassMsg({ text: "New password must be at least 6 characters.", type: "error" });
+    if (passForm.newPassword !== passForm.confirmPassword)
+      return setPassMsg({ text: "New passwords do not match.", type: "error" });
+
+    setPassLoading(true);
+    setPassMsg({ text: "", type: "" });
+    try {
+      const res = await API.put("/admin/change-password", {
+        currentPassword: passForm.currentPassword,
+        newPassword: passForm.newPassword,
+      });
+      if (res.data.success) {
+        setPassMsg({ text: "Password changed successfully! ✅", type: "success" });
+        setPassForm({ currentPassword: "", newPassword: "", confirmPassword: "" });
+      }
+    } catch (err) {
+      setPassMsg({ text: err.response?.data?.message || "Something went wrong!", type: "error" });
+    } finally { setPassLoading(false); }
+  };
+
   return (
     <div className="space-y-6 max-w-2xl">
       <h2 className="text-2xl font-bold">Admin Settings</h2>
+
       <div className="bg-white p-5 rounded-2xl shadow space-y-4">
-        <input className="w-full border p-2 rounded" placeholder="Admin Name" />
-        <input className="w-full border p-2 rounded" placeholder="Email" />
-        <input className="w-full border p-2 rounded" placeholder="Phone" />
+        <h3 className="font-semibold text-gray-700">Profile Info</h3>
+        {profileMsg.text && (
+          <div className={`px-4 py-2 rounded-lg text-sm font-medium ${profileMsg.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+            {profileMsg.text}
+          </div>
+        )}
+        <input className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Admin Name" value={profile.name}  onChange={(e) => setProfile({ ...profile, name: e.target.value })} />
+        <input className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Email"      value={profile.email} onChange={(e) => setProfile({ ...profile, email: e.target.value })} />
+        <input className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Phone"      value={profile.phone} onChange={(e) => setProfile({ ...profile, phone: e.target.value })} />
+        <button onClick={handleProfileSave} disabled={profileLoading} className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white px-5 py-2 rounded-lg transition">
+          {profileLoading ? "Saving..." : "Save Settings"}
+        </button>
       </div>
-      <button className="bg-blue-600 text-white px-5 py-2 rounded-lg">Save Settings</button>
+
+      <div className="bg-white p-5 rounded-2xl shadow space-y-4">
+        <h3 className="font-semibold text-gray-700">Change Password</h3>
+        {passMsg.text && (
+          <div className={`px-4 py-2 rounded-lg text-sm font-medium ${passMsg.type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}`}>
+            {passMsg.text}
+          </div>
+        )}
+        <input type="password" name="currentPassword" value={passForm.currentPassword} onChange={handlePassChange} className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Current Password" />
+        <input type="password" name="newPassword"     value={passForm.newPassword}     onChange={handlePassChange} className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="New Password" />
+        <input type="password" name="confirmPassword" value={passForm.confirmPassword} onChange={handlePassChange} className="w-full border p-2 rounded focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Confirm New Password" />
+        <button onClick={handlePasswordChange} disabled={passLoading} className="bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 text-white px-5 py-2 rounded-lg transition">
+          {passLoading ? "Updating..." : "Update Password"}
+        </button>
+      </div>
     </div>
   );
 }

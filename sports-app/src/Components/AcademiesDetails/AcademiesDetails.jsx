@@ -27,7 +27,7 @@ function AcademiesDetails() {
         const res = await axios.get(
           `http://localhost:5000/api/academy/single/${id}`
         );
-        setAcademy(res.data);
+        setAcademy(res.data.data);
       } catch (err) {
         console.log("Error fetching academy:", err);
       } finally {

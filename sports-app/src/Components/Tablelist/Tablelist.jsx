@@ -1,19 +1,46 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import academiesFullData from "../../Data/academiesFullData";
+import API from "../../api/axios";
 
 function Tablelist({ onRowClick }) {
   const [filter, setFilter] = useState("all");
+  const [dbAcademies, setDbAcademies] = useState([]);
 
-  const filteredData =
-    filter === "all"
-      ? academiesFullData
-      : academiesFullData.filter((academy) => {
-          const status = academy.status?.toLowerCase();
-          if (filter === "approved") return status === "active" || status === "approved";
-          if (filter === "pending") return status === "pending";
-          if (filter === "rejected") return status === "rejected";
-          return true;
-        });
+  useEffect(() => {
+    fetchAcademies();
+  }, []);
+
+  const fetchAcademies = async () => {
+    try {
+      const res = await API.get("/academies");
+      if (res.data.success) {
+        setDbAcademies(res.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  // ✅ Static + DB merge
+  const allAcademies = [
+    ...academiesFullData.map(a => ({ ...a, isStatic: true })),
+    ...dbAcademies.map(a => ({
+      ...a,
+      id: a._id,
+      sports: a.sports || [],
+      isStatic: false,
+    })),
+  ];
+
+  const filteredData = filter === "all"
+    ? allAcademies
+    : allAcademies.filter((academy) => {
+        const status = academy.status?.toLowerCase();
+        if (filter === "approved") return status === "active" || status === "approved";
+        if (filter === "pending") return !status || status === "pending";
+        if (filter === "rejected") return status === "rejected";
+        return true;
+      });
 
   return (
     <div className="bg-white/80 backdrop-blur p-6 rounded-3xl shadow">
@@ -45,30 +72,33 @@ function Tablelist({ onRowClick }) {
           <tbody className="text-sm">
             {filteredData.map((academy) => (
               <tr
-                key={academy.id}
+                key={academy.id || academy._id}
                 onClick={() => onRowClick && onRowClick(academy)}
                 className="border-b hover:bg-blue-50 cursor-pointer transition"
               >
                 <td className="py-3 font-medium text-blue-600 hover:underline">
-                  {academy.name}
+                  {/* ✅ SIRF YE LINE BADLI */}
+                  {academy.isStatic ? academy.name : academy.academyName}
+                  {!academy.isStatic && (
+                    <span className="ml-2 px-2 py-0.5 bg-blue-100 text-blue-600 text-xs rounded-full">
+                      New
+                    </span>
+                  )}
                 </td>
 
                 <td className="py-3 text-gray-600">{academy.city}</td>
 
-                <td className="py-3 text-gray-600">{academy.sports.join(", ")}</td>
+                <td className="py-3 text-gray-600">
+                  {academy.sports?.join(", ") || "N/A"}
+                </td>
 
-                <td
-                  className={`py-3 font-medium capitalize ${
-                    academy.status === "approved"
-                      ? "text-green-600"
-                      : academy.status === "pending"
-                      ? "text-yellow-600"
-                      : academy.status === "rejected"
-                      ? "text-red-600"
-                      : "text-gray-600"
-                  }`}
-                >
-                  {academy.status || "approved"}
+                <td className={`py-3 font-medium capitalize ${
+                  academy.status === "approved" ? "text-green-600" :
+                  academy.status === "pending" ? "text-yellow-600" :
+                  academy.status === "rejected" ? "text-red-600" :
+                  "text-gray-600"
+                }`}>
+                  {academy.status || "pending"}
                 </td>
               </tr>
             ))}

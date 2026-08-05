@@ -91,12 +91,6 @@ const AboutSportsAcademy = () => {
               fitness, teamwork, and sportsmanship.
             </p>
 
-          <button
-  onClick={() => navigate("/academies")}
-  className="bg-blue-600 text-white px-6 py-3 rounded-xl shadow-lg hover:bg-blue-700 transition"
->
-  Join Our Academy
-</button>
 
           </div>
 

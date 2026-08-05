@@ -43,14 +43,12 @@ const Footer = () => {
               <FaMapMarkerAlt className="mt-1 text-cyan-400" />
               <span>
                 <b>Ahmedabad</b><br />
-                Navrangpura, Bopal, Maninagar
               </span>
             </li>
             <li className="flex items-start gap-3 hover:text-white transition">
               <FaMapMarkerAlt className="mt-1 text-cyan-400" />
               <span>
                 <b>Gandhinagar</b><br />
-                Sector 11, Sector 21, Kudasan
               </span>
             </li>
           </ul>
